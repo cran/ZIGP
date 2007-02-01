@@ -24,7 +24,10 @@ wald.test(Yin, Xin, Win, Zin, Offset = rep(1, length(Yin)), init = T)
 \details{
      In order to include an intercept in a design matrix, one has to
      add a vector of ones to the design matrix:
-     'Intercept <- rep(1,n)'.
+     'Intercept <- rep(1,n)'.Overall overdispersion and/or zero-inflation
+     can be modelled using an Intercept design.
+     Note that you cannot fit models without a dispersion or without a 
+     zero-inflation design!
      
      If the output should have variable names additionally to parameter 
      tokens (such as 'b0', 'a0' or 'g0'), create the design matrix by
@@ -66,7 +69,7 @@ wald.test(Yin=Y, Xin=X, Win=W, Zin=Z, Offset = insurance.year, init = FALSE)
 #11       Signif. codes: 0 `***' 0.001 `**'  0.01 `*'  0.05 `.'  0.1 ` ' 1
 #12             Iterations                     43                         
 #13         Log Likelihood                  -23.4                         
-#14    Pearson Chi Squared                    2.5                         
+#14    Pearson Chi Squared                   15.1                         
 #15                    AIC                     57                         
 #16               Range Mu                   0.23      2.45               
 #17              Range Phi                   1.00      2.19               
@@ -113,7 +116,7 @@ hat.gamma  <- ausgabe$Coefficients.Omega
 
 B <- FM(hat.beta, hat.alpha, hat.gamma, X, W, Z, Offset = Offset)
 
-sd.vector <- sqrt( diag(solve(B, tol = 1e-20)) )
+sd.vector <- sqrt( diag(solve(B, tol = 1e-50)) )
 
 hat.sd.beta   <- sd.vector[1:k.beta]
 

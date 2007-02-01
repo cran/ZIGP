@@ -79,7 +79,7 @@ summary = TRUE, init = FALSE)
 #[3]   Coefficients for mu:       1.471478 -0.05075418
 #[4]   Coefficients for phi:      -8.646371 0.1733860
 #[5]   Coefficients for omega:    -1.103385
-#[6]   Pearson Chi Squared:       2.501088
+#[6]   Pearson Chi Squared:       15.09779
 #[7]   Range of mu:               0.2294054 2.445806
 #[8]   Message:                   "NULL"
 #[9]   AIC:                       56.88305
@@ -235,7 +235,7 @@ function(Yin, Xin, Win, Zin, Offset = rep(1,length(Yin)), summary = TRUE, init =
 
   res <- Y - fit$fit
 
-  chsq <- sum((Y - fit$fit) / sqrt((1-fit$omega)*fit$phi*fit$fit+fit$omega*(1-fit$omega)*fit$fit^2))
+  sum((Y - fit$fit)^2 / ((1-fit$omega)*fit$mu*(fit$phi^2+fit$mu*fit$omega)))
 
 
 

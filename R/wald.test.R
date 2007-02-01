@@ -39,7 +39,7 @@ hat.gamma  <- ausgabe$Coefficients.Omega
 
 B <- FM(hat.beta, hat.alpha, hat.gamma, X, W, Z, Offset = Offset)
 
-sd.vector <- sqrt( diag(solve(B, tol = 1e-20)) )
+sd.vector <- sqrt( diag(solve(B, tol = 1e-50)) )
 
 hat.sd.beta   <- sd.vector[1:k.beta]
 

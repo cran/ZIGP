@@ -149,7 +149,7 @@ function(Yin, Xin, Win, Zin, Offset = rep(1,length(Yin)), summary = TRUE, init =
 
   res <- Y - fit$fit
 
-  chsq <- sum((Y - fit$fit) / sqrt((1-fit$omega)*fit$phi*fit$fit+fit$omega*(1-fit$omega)*fit$fit^2))
+  chsq <- sum((Y - fit$fit)^2 / ((1-fit$omega)*fit$mu*(fit$phi^2+fit$mu*fit$omega)))
 
 
 
