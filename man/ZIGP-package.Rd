@@ -14,10 +14,12 @@ and zero-inflation level. Therefore, three design matrices are used.
 \tabular{ll}{
 Package: \tab ZIGP\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2006-08-02\cr
-License: \tab GPL\cr
+Version: \tab 1.1\cr
+Date: \tab 2007-02-01\cr
+License: \tab GPL (v.2 or later)\cr
 }
+Distribution functions in R notation are 'dzigp', 'pzigp', 'qzigp', 'rzigp'.
+
 The most important function is 'wald.test'. This function can be fed with
 design matrices for the mean, overdispersion and zero-inflation level. It 
 returns an summary-like overview of the covariates together with significance

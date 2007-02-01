@@ -1,40 +1,40 @@
-\name{rzigp}
-\alias{rzigp}
+\name{qzigp}
+\alias{qzigp}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ ZIGP random variable generator }
+\title{ Quantile function of ZIGP distribution }
 \description{
-'rzigp' generates ZIGP random variables using the inversion method.
+'qzigp' calculates the quantiles of the ZIGP distribution.
 }
 \usage{
-rzigp(n, mu, phi, omega)
+qzigp(p, mu, phi, omega)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{n}{ length of output random vector. }
+  \item{p}{ vector of probabilities }
   \item{mu}{ mean }
   \item{phi}{ dispersion parameter }
   \item{omega}{ zero inflation parameter }
 }
 \value{
-Generates a ZIGP random vector of length n.}
+Calculates a vector of the same length as of p containing quantiles of the
+ZIGP distribution.}
 \examples{
-# set seed for random variable generator
-set.seed(2)
-rzigp(3, 2, 1.5, 0.2)
-#[1] 3 1 0
-
+p <- seq(0, 1, 0.1)
+qzigp(p, 2, 1.5, 0.2)
+#[1]  0  0  0  0  0  1  1  2  3  4 75
+  
 ## The function is currently defined as
-function(n, mu = stop("no mu arg"), phi = stop("no phi arg"), omega = stop("no omega arg"))
+function(p, mu = stop("no mu arg"), phi = stop("no phi arg"), omega = stop("no omega arg"))
 {
-# check if parameters are valid
-if(omega < 0) {return("omega has to be in [0,1]!")}
-if(omega > 1) {return("omega has to be in [0,1]!")}
+  # check if parameters are valid
+  if(omega < 0) {return("omega has to be in [0,1]!")}
+  if(omega > 1) {return("omega has to be in [0,1]!")}
 
-# inversion method
-   x <- double(n)
-   u <- runif(n, 0, 1)
-   upper <- max(u)
+   p.in <- p
+   upper <- max(p.in)
    s <- double(1000)
+   q <- double(length(p.in))
+   p <- double(1)
    #P(X=0)
    p <- omega + (1-omega) * exp(-mu/phi)
    s[1] <- p
@@ -66,14 +66,14 @@ if(omega > 1) {return("omega has to be in [0,1]!")}
         i <- i+1
       }
    }
-  for (j in 1:length(u)) {
+  for (j in 1:length(p.in)) {
      i <- 1
-     while (u[j] > s[i]) {   
+     while (p.in[j] > s[i]) {   
         i <- i+1
      }
-     x[j] <- i-1
+     q[j] <- i-1
    }
-   return(x)
+   return(q)
 }
 }
-\keyword{ datagen }% at least one, from doc/KEYWORDS
+\keyword{ distribution }% at least one, from doc/KEYWORDS

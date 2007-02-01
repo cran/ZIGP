@@ -1,1 +1,1 @@
-export(fit.zigp, FM, gradient, loglikelihood.zigp, response.zigp, rzigp, wald.test, mle.zigp, optimized.run)
+export(fit.zigp, FM, gradient, loglikelihood.zigp, response.zigp, dzigp, pzigp, qzigp, rzigp, wald.test, mle.zigp, optimized.run)

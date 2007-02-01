@@ -1,15 +1,15 @@
-rzigp <-
-function(n, mu = stop("no mu arg"), phi = stop("no phi arg"), omega = stop("no omega arg"))
+qzigp <-
+function(p, mu = stop("no mu arg"), phi = stop("no phi arg"), omega = stop("no omega arg"))
 {
-# check if parameters are valid
-if(omega < 0) {return("omega has to be in [0,1]!")}
-if(omega > 1) {return("omega has to be in [0,1]!")}
+  # check if parameters are valid
+  if(omega < 0) {return("omega has to be in [0,1]!")}
+  if(omega > 1) {return("omega has to be in [0,1]!")}
 
-# inversion method
-   x <- double(n)
-   u <- runif(n, 0, 1)
-   upper <- max(u)
+   p.in <- p
+   upper <- max(p.in)
    s <- double(1000)
+   q <- double(length(p.in))
+   p <- double(1)
    #P(X=0)
    p <- omega + (1-omega) * exp(-mu/phi)
    s[1] <- p
@@ -41,12 +41,12 @@ if(omega > 1) {return("omega has to be in [0,1]!")}
         i <- i+1
       }
    }
-  for (j in 1:length(u)) {
+  for (j in 1:length(p.in)) {
      i <- 1
-     while (u[j] > s[i]) {   
+     while (p.in[j] > s[i]) {   
         i <- i+1
      }
-     x[j] <- i-1
+     q[j] <- i-1
    }
-   return(x)
+   return(q)
 }
