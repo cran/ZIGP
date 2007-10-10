@@ -1,6 +1,7 @@
 \name{ZIGP-package}
 \alias{ZIGP-package}
 \alias{ZIGP}
+\encoding{latin1}
 \docType{package}
 \title{
 Zero-Inflated Generalized Poisson (ZIGP) Models
@@ -14,8 +15,8 @@ and zero-inflation level. Therefore, three design matrices are used.
 \tabular{ll}{
 Package: \tab ZIGP\cr
 Type: \tab Package\cr
-Version: \tab 1.2\cr
-Date: \tab 2007-07-29\cr
+Version: \tab 1.3\cr
+Date: \tab 2007-10-10\cr
 License: \tab GPL (v.2 or later)\cr
 }
 Distribution functions in R notation are 'dzigp', 'pzigp', 'qzigp', 'rzigp'.
@@ -36,6 +37,11 @@ Vinzenz Erhardt
 Maintainer: Vinzenz Erhardt <erhardt@ma.tum.de>
 }
 \references{
+Czado, C., Erhardt, V., Min, A., Wagner, S. (2007) 
+Zero-inflated generalized Poisson models with regression effects on the mean, 
+dispersion and zero-inflation level applied to patent outsourcing rates.
+Statistical Modelling 7 (2), 125-153.
+
 Masterthesis in German:
 Erhardt, Vinzenz. Verallgemeinerte Poisson und Nullenueberschuss- 
 Regressionsmodelle mit regressiertem Erwartungswert, Dispersions- und 
