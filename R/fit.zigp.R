@@ -33,6 +33,9 @@ function(delta)
 
     }
 
+
+  if(is.null(W)==FALSE){
+
     if(k.alpha == 1) {
 
       eta.phi <- W * delta[k.beta + 1]
@@ -46,6 +49,10 @@ function(delta)
       eta.phi <- W %*% alpha
 
     }
+    
+  }
+
+  if(is.null(Z)==FALSE){
 
     if(k.gamma == 1) {
 
@@ -60,6 +67,8 @@ function(delta)
       eta.omega <- Z %*% gamma
 
     }
+    
+  }
 
 
 
@@ -67,9 +76,13 @@ function(delta)
 
     mu <- t.i*exp(eta.mu)
 
-    phi <- 1 + exp(eta.phi)
+    if(is.null(W)==FALSE){ phi <- 1 + exp(eta.phi) }
+    
+    else { phi <- 1 }
 
-    omega <- exp(eta.omega)/(1+exp(eta.omega))
+    if(is.null(W)==FALSE){ omega <- exp(eta.omega)/(1+exp(eta.omega)) }
+    
+    else { omega <- 0 }
 
     fit <- (1 - omega) * mu
 

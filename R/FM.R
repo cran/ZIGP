@@ -21,13 +21,37 @@ if(is.matrix(X)){ eta.mu <- X%*%beta }
 
 else{eta.mu <- X*beta}
 
-if(is.matrix(W)){ eta.phi <- W%*%alpha }
+if(is.null(W)==FALSE) {
 
-else{eta.phi <- W*alpha}
+  if(k.alpha == 1) {
 
-if(is.matrix(Z)){ eta.gamma <- Z%*%gamma }
+    eta.phi <- W * alpha
 
-else{eta.gamma <- Z*gamma}
+  }
+
+  else {
+
+    eta.phi <- W %*% alpha
+
+  }
+
+}
+
+if(is.null(Z)==FALSE) {
+
+  if(k.gamma == 1) {
+
+    eta.omega <- Z * gamma
+
+  }
+
+  else {
+
+    eta.omega <- Z %*% gamma
+
+  }
+
+}
 
 
 
@@ -37,11 +61,25 @@ else {t.i <<- Offset
 
      mu  <- t.i*exp(eta.mu)}
 
-b <- exp(eta.phi)
+if(is.null(W)==FALSE) {
 
-phi <- 1+b
+  b <- exp(eta.phi)
 
-k <- exp(eta.gamma)
+  phi <- 1+b
+
+}
+
+else { b <- rep(0,n)
+
+       phi <- rep(1,n) }
+       
+if(is.null(Z)==FALSE) {
+
+  k <- exp(eta.omega)
+  
+}
+
+else { k <- rep(0,n) }
 
 P0 <- exp(-1/phi*mu)
 
@@ -73,9 +111,21 @@ for (i in 1:k.beta)
 
   {
 
-  temp <- sum( X[,i]*X[,j]*mu* ( a*(-1/phi*P0^2+(mu-phi)/(phi^2)*P0*k)/
+  if(is.null(Z)==FALSE) {
 
-          ((k+P0)^2) + (b*mu)/(phi^2*(mu-2+2*phi)*(1+k)) - (1-a)/phi ) )
+    temp <- sum( X[,i]*X[,j]*mu* ( a*(-1/phi*P0^2+(mu-phi)/(phi^2)*P0*k)/
+
+            ((k+P0)^2) + (b*mu)/(phi^2*(mu-2+2*phi)*(1+k)) - (1-a)/phi ) )
+            
+  }
+  
+  else {
+  
+    temp <- sum( X[,i]*X[,j]*mu* ( a*(-1/phi) +
+
+            (b*mu)/(phi^2*(mu-2+2*phi)*(1+k)) - (1-a)/phi ) )
+
+  }
 
   FM[i,j] <- -temp
 
@@ -86,6 +136,8 @@ for (i in 1:k.beta)
 
 
 # the second derivative w.r.t. "alpha"
+
+if(is.null(W)==FALSE) {
 
 for (i in 1:k.alpha)
 
@@ -107,9 +159,13 @@ for (i in 1:k.alpha)
 
 }
 
+}
+
 
 
 # the second derivative w.r.t. "gamma"
+
+if(is.null(Z)==FALSE) {
 
 for (i in 1:k.gamma)
 
@@ -127,9 +183,13 @@ for (i in 1:k.gamma)
 
 }
 
+}
+
 
 
 # the mixed derivative w.r.t. "beta" and "alpha"
+
+if(is.null(W)==FALSE) {
 
 for (i in 1:k.beta)
 
@@ -151,9 +211,13 @@ FM[i,k.beta+j] <- -temp
 
 }
 
+}
+
 
 
 # the mixed derivative w.r.t. "beta" and "gamma"
+
+if(is.null(Z)==FALSE) {
 
 for (i in 1:k.beta)
 
@@ -173,9 +237,13 @@ for (i in 1:k.beta)
 
 }
 
+}
+
 
 
 # the mixed derivative w.r.t. "alpha" and "gamma"
+
+if(is.null(W)==FALSE&is.null(Z)==FALSE) {
 
 for (i in 1:k.gamma)
 
@@ -192,6 +260,8 @@ for (i in 1:k.gamma)
   FM[k.beta+j,k.beta+k.alpha+i] <- -temp
 
   }
+
+}
 
 }
 

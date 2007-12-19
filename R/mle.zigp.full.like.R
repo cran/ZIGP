@@ -64,9 +64,13 @@ function(Yein, Xein, Offset = rep(1,length(Y)), summary = TRUE, plot = FALSE, me
 
   coef <- delta
 
-  phi <- 1 + exp(coef[1])
+  if (is.null(W)==FALSE) { phi <- 1 + exp(coef[1]) }
+  
+  else { phi <- 1 }
 
-  omega <- exp(coef[2])/(1+exp(coef[2]))
+  if (is.null(Z)==FALSE) { omega <- exp(coef[2])/(1+exp(coef[2])) }
+  
+  else { omega <- 0 }
 
   beta <- coef[3:(k + 2)]
 
@@ -76,11 +80,11 @@ function(Yein, Xein, Offset = rep(1,length(Y)), summary = TRUE, plot = FALSE, me
 
   RSS <- 0
 
-    res <- Y - fit$fit
+  res <- Y - fit$fit
 
-    RSS <- sum( res^2)
+  RSS <- sum( res^2)
 
-AIC <- -2 * loglikelihood + 2 * (k + 2)
+  AIC <- -2 * loglikelihood + 2 * (k + 2)
 
 
 
@@ -116,7 +120,7 @@ AIC <- -2 * loglikelihood + 2 * (k + 2)
 
     if(summary)
 
-      summary.zigp1(ausgabe)
+      summaryzigp1(ausgabe)
 
   }
 
@@ -124,7 +128,7 @@ AIC <- -2 * loglikelihood + 2 * (k + 2)
 
     if(summary) {
 
-      summary.zigp1(ausgabe)
+      summaryzigp1(ausgabe)
 
     }
 

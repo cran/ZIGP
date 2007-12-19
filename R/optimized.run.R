@@ -13,31 +13,39 @@ function(Y,X,W,Z)
 
   beta.start <- out$Coefficients
 
-  phi.first <- out$Dispersion.Parameter
+  if (is.null(W)==FALSE) { phi.first <- out$Dispersion.Parameter }
 
-  omega.first <- out$ZI.Parameter
+  if (is.null(Z)==FALSE) { omega.first <- out$ZI.Parameter }
 
 
 
 # LM for alpha
 
-  rechte.seite <- rep(log(phi.first - 1),n)
+  if (is.null(W)==FALSE) {
 
-  out<-lm(rechte.seite ~ W-1)
+    rechte.seite <- rep(log(phi.first - 1),n)
 
-  alpha.start <- out$coefficients
+    out<-lm(rechte.seite ~ W-1)
 
+    alpha.start <- out$coefficients
 
+  }
+  
+  else {alpha.start <- NULL }
 
 # LM for gamma
 
-  rechte.seite <- rep(log(omega.first)-log(1-omega.first),n)
+  if (is.null(Z)==FALSE) {
 
-  out<-lm(rechte.seite ~ Z-1)
+    rechte.seite <- rep(log(omega.first)-log(1-omega.first),n)
 
-  gamma.start <- out$coefficients
+    out<-lm(rechte.seite ~ Z-1)
 
-  rm(rechte.seite,out)
+    gamma.start <- out$coefficients
+    
+  }
+  
+  else { gamma.start <- NULL }
 
 
 

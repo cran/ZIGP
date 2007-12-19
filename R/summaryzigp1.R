@@ -1,9 +1,9 @@
-"summary.zigp1" <-
-function(mle.daten)
+"summaryzigp1" <-
+function(mledaten)
 
 {
 
-        X <- mle.daten$Design
+        X <- mledaten$Design
 
         if(is.matrix(X)) {
 
@@ -23,7 +23,7 @@ function(mle.daten)
 
         out0 <- matrix(double(1), 1, 1)
 
-        out0[1, 1] <- mle.daten$ZI.Parameter
+        out0[1, 1] <- mledaten$ZI.Parameter
 
         colnames(out0) <- c("")
 
@@ -37,7 +37,7 @@ function(mle.daten)
 
         for(i in 1:k) {
 
-                 out1[1, i] <- mle.daten$Coefficients[i]
+                 out1[1, i] <- mledaten$Coefficients[i]
 
         }
 
@@ -49,7 +49,7 @@ function(mle.daten)
 
         out2 <- matrix(double(1), 1, 1)
 
-        out2[1, 1] <- mle.daten$Dispersion.Parameter
+        out2[1, 1] <- mledaten$Dispersion.Parameter
 
         colnames(out2) <- c("")
 
@@ -59,7 +59,7 @@ function(mle.daten)
 
         out3 <- matrix(double(1), 1, 1)
 
-        out3[1, 1] <- mle.daten$RSS
+        out3[1, 1] <- mledaten$RSS
 
         colnames(out3) <- c("")
 
@@ -69,7 +69,7 @@ function(mle.daten)
 
         out4 <- matrix(double(1), 1, 1)
 
-        out4[1, 1] <- mle.daten$AIC
+        out4[1, 1] <- mledaten$AIC
 
         colnames(out4) <- c("")
 
@@ -79,9 +79,9 @@ function(mle.daten)
 
         out5 <- matrix(double(2), 1, 2)
 
-        out5[1, 1] <- mle.daten$Range.mu[1]
+        out5[1, 1] <- mledaten$Range.mu[1]
 
-        out5[1, 2] <- mle.daten$Range.mu[2]
+        out5[1, 2] <- mledaten$Range.mu[2]
 
         colnames(out5) <- c("", "")
 
@@ -91,9 +91,9 @@ function(mle.daten)
 
         out6 <- matrix(double(1), 1, 1)
 
-        if (is.null(mle.daten$Message)) { out6[1, 1] <- "NULL"}
+        if (is.null(mledaten$Message)) { out6[1, 1] <- "NULL"}
 
-        else {out6[1, 1] <- mle.daten$Message}
+        else {out6[1, 1] <- mledaten$Message}
 
         colnames(out6) <- c("")
 

@@ -15,21 +15,21 @@ function(delta)
 
 
 
-    if(k.beta == 1) {
+  if(k.beta == 1) {
 
-      eta.mu <- X * delta[1]
+    eta.mu <- X * delta[1]
 
-    }
+  }
 
-    else {
+  else {
 
-      beta <- delta[1:k.beta]
+    beta <- delta[1:k.beta]
 
-      eta.mu <- X %*% beta
+    eta.mu <- X %*% beta
 
-    }
+  }
 
-    
+  if(is.null(W)==FALSE) {
 
     if(k.alpha == 1) {
 
@@ -45,7 +45,9 @@ function(delta)
 
     }
 
-    
+  }
+
+  if(is.null(Z)==FALSE) {
 
     if(k.gamma == 1) {
 
@@ -61,19 +63,35 @@ function(delta)
 
     }
 
+  }
 
 
 
 
-    mu.i <- t.i*exp(eta.mu)
+
+  mu.i <- t.i*exp(eta.mu)
+
+  if(is.null(W)==FALSE) {
 
     b.i <- exp(eta.phi)
 
-    phi.i <- 1 + b.i
+    phi.i <- 1+b.i
+
+  }
+
+  else { b.i <- rep(0,n)
+
+         phi.i <- rep(1,n) }
+
+  if(is.null(Z)==FALSE) {
 
     k.i <- exp(eta.omega)
 
-    temp1 <- (mu.i + b.i*Y)
+  }
+
+  else { k.i <- rep(0,n) }
+
+  temp1 <- (mu.i + b.i*Y)
 
 
 

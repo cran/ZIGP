@@ -29,7 +29,8 @@ k.alpha has to be defined as the length of alpha.
 
 k.gamma has to be defined as the length of gamma.
 
-t.i has to be defined as the exposure.}
+t.i has to be defined as the exposure.
+}
 \examples{
 X <- matrix(c(1:3,4,3,5),3,2)
 W <- c(3,-4,-1)
@@ -58,87 +59,6 @@ fit.zigp(delta)
 #[12]  [1] 26904.186074     1.000001     1.033373
 #[13]  $omega
 #[14]  [1] 4.539787e-05 4.539787e-05 4.539787e-05
-
-## The function is currently defined as
-function(delta)
-
-{
-
-    eta.mu <- double(n)
-
-    eta.phi <- double(n)
-
-    eta.omega <- double(n)
-
-    mu <- double(n)
-
-    phi <- double(n)
-
-    omega <- double(n)
-
-    fit <- double(n)
-
-
-
-    if(k.beta == 1) {
-
-      eta.mu <- X * delta[1]
-
-    }
-
-    else {
-
-      beta <- delta[1:k.beta]
-
-      eta.mu <- X \%*\% beta
-
-    }
-
-    if(k.alpha == 1) {
-
-      eta.phi <- W * delta[k.beta + 1]
-
-    }
-
-    else {
-
-      alpha <- delta[(k.beta + 1) : (k.beta + k.alpha)]
-
-      eta.phi <- W \%*\% alpha
-
-    }
-
-    if(k.gamma == 1) {
-
-      eta.omega <- Z * delta[k.beta + k.alpha + 1]
-
-    }
-
-    else {
-
-      gamma <- delta[(k.beta + k.alpha + 1) : (k.beta + k.alpha + k.gamma)]
-
-      eta.omega <- Z \%*\% gamma
-
-    }
-
-
-
-# computation of mu, phi, omega and mean
-
-    mu <- t.i*exp(eta.mu)
-
-    phi <- 1 + exp(eta.phi)
-
-    omega <- exp(eta.omega)/(1+exp(eta.omega))
-
-    fit <- (1 - omega) * mu
-
-
-
-        return(list(fit = fit, mu = mu, phi = phi, omega = omega))
-
-  }
 }
 \keyword{ datagen }% at least one, from doc/KEYWORDS
 

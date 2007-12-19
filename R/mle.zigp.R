@@ -1,5 +1,5 @@
 "mle.zigp" <-
-function(Yin, Xin, Win, Zin, Offset = rep(1,length(Yin)), summary = TRUE, init = FALSE)
+function(Yin, Xin, Win=NULL, Zin=NULL, Offset = rep(1,length(Yin)), init = FALSE)
 
 {
 
@@ -27,41 +27,23 @@ function(Yin, Xin, Win, Zin, Offset = rep(1,length(Yin)), summary = TRUE, init =
 
   }
 
-  if(is.matrix(W)) {
+  if(is.null(W)==FALSE){
+  
+    if(is.matrix(W)) { k.alpha <<- dim(W)[2] }
 
-    k.alpha <<- dim(W)[2]
-
-    nw <<- dim(W)[1]
-
-  }
-
-  else {
-
-    k.alpha <<- 1
-
-    nw <<- length(W)
+    else { k.alpha <<- 1 }
 
   }
 
-  if(is.matrix(Z)) {
+  if(is.null(Z)==FALSE){
 
-    k.gamma <<- dim(Z)[2]
+    if(is.matrix(Z)) { k.gamma <<- dim(Z)[2] }
 
-    nz <<- dim(Z)[1]
-
-  }
-
-  else {
-
-    k.gamma <<- 1
-
-    nz <<- length(Z)
-
+    else { k.gamma <<- 1 }
+    
   }
 
 
-
-  if(nz==n & nw==n){
 
   t.i <<- Offset
 
@@ -91,9 +73,13 @@ function(Yin, Xin, Win, Zin, Offset = rep(1,length(Yin)), summary = TRUE, init =
 
     # simple initial values
 
-    alpha <- rep(-2.5,k.alpha)
+    if(is.null(W)==FALSE){ alpha <- rep(-2.5,k.alpha) }
+    
+    else { alpha <- NULL }
 
-    gamma <- rep(-2.5,k.gamma)
+    if(is.null(Z)==FALSE){ gamma <- rep(-2.5,k.gamma) }
+
+    else { gamma <- NULL }
 
     beta <- summary(glm(Y ~ offset(log(t.i)) + 1 + X, family = poisson(link=log)
 
@@ -133,15 +119,17 @@ function(Yin, Xin, Win, Zin, Offset = rep(1,length(Yin)), summary = TRUE, init =
 
 # results
 
-  coef <- double(k.beta + k.alpha + k.gamma)
-
   coef <- delta
 
   beta <- coef[1 : k.beta]
 
-  alpha <- coef[(k.beta + 1) : (k.beta + k.alpha)]
+  if(is.null(W)==FALSE){ alpha <- coef[(k.beta + 1) : (k.beta + k.alpha)] }
+  
+  else { alpha <- NULL }
 
-  gamma <- coef[(k.beta + k.alpha + 1) : (k.beta + k.alpha + k.gamma)]
+  if(is.null(Z)==FALSE){ gamma <- coef[(k.beta + k.alpha + 1) : (k.beta + k.alpha + k.gamma)] }
+
+  else { gamma <- NULL }
 
 
 
@@ -157,23 +145,36 @@ function(Yin, Xin, Win, Zin, Offset = rep(1,length(Yin)), summary = TRUE, init =
 
 # compute zero inflation parameters omega
 
-  if(is.matrix(Z)){ eta.omega <- Z %*% gamma }
+  if(is.null(Z)==FALSE){
 
-  else { eta.omega <- Z * gamma }
+    if(is.matrix(Z)){ eta.omega <- Z %*% gamma }
 
-  omega <- exp(eta.omega)/(1+exp(eta.omega))
+    else { eta.omega <- Z * gamma }
+
+    omega <- exp(eta.omega)/(1+exp(eta.omega))
+
+  }
+  
+  else { omega <- rep(0,n) }
 
   range.omega <- c(min(omega), max(omega))
 
 # compute dispersion parameters phi
 
-  if(is.matrix(W)){ eta.phi <- W %*% alpha }
+  if(is.null(W)==FALSE){
 
-  else { eta.phi <- W * alpha }
+    if(is.matrix(W)){ eta.phi <- W %*% alpha }
 
-  phi <- 1+ exp(eta.phi)
+    else { eta.phi <- W * alpha }
+
+    phi <- 1+ exp(eta.phi)
+
+  }
+
+  else { phi <- rep(1,n) }
 
   range.phi <- c(min(phi), max(phi))
+
 
 
 
@@ -219,25 +220,7 @@ function(Yin, Xin, Win, Zin, Offset = rep(1,length(Yin)), summary = TRUE, init =
 
     Design.Omega = Z)
 
-    if(summary) {
+    return(mle.data)
 
-      summary.zigp(mle.data)
-
-    }
-
-    else {
-
-      return(mle.data)
-
-    }
-
-  }
-
-  else{
-
-  return("X, W and Z have different numbers of rows!")
-
-  }
-
-}
+ }
 
