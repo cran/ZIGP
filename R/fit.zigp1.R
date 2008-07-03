@@ -3,6 +3,11 @@ function(delta)
 
 {
 
+        n <- get("n", pos=globalenv())
+        k <- get("k", pos=globalenv())
+        X <- get("X", pos=globalenv())
+        t.i <- get("t.i", pos=globalenv())
+        
         eta <- double(n)
 
         mu <- double(n)

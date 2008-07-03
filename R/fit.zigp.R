@@ -3,6 +3,15 @@ function(delta)
 
 {
 
+    n <- get("n")
+    k.beta <- get("k.beta")
+    k.alpha <- get("k.alpha")
+    k.gamma <- get("k.gamma")
+    X <- get("X")
+    W <- get("W")
+    Z <- get("Z")
+    t.i <- get("t.i")
+    
     eta.mu <- double(n)
 
     eta.phi <- double(n)

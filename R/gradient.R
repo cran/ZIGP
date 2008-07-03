@@ -3,6 +3,13 @@ function(delta)
 
 {
 
+  n <- get("n")
+  k.beta <- get("k.beta")
+  k.alpha <- get("k.alpha")
+  k.gamma <- get("k.gamma")
+  Y <- get("Y")
+  t.i <- get("t.i")
+  
   grad <- double(k.beta + k.alpha + k.gamma)
 
   eta.mu <- double(n)
@@ -20,8 +27,6 @@ function(delta)
     if(k.beta == 1) {
 
       eta.mu <- X * delta[1]
-
-      X <- cbind(X,rep(0,length(X)))
 
     }
 

@@ -8,7 +8,7 @@ mean, overdispersion and zero-inflation.
 }
 \usage{
 mle.zigp(Yin, Xin, Win=NULL, Zin=NULL, Offset = rep(1, length(Yin)),
-init = FALSE)
+init = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

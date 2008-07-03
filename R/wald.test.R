@@ -2,24 +2,34 @@ wald.test <-
 function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     init = T)
 {
-    Y <<- Yin
-    X <<- Xin
-    W <<- Win
-    Z <<- Zin
-    k.beta <<- dim(X)[2]
+    assign("Y",Yin,.GlobalEnv)
+    Y <- get("Y", pos=globalenv())
+    assign("X",Xin,.GlobalEnv)
+    X <- get("X", pos=globalenv())
+    assign("W",Win,.GlobalEnv)
+    W <- get("W", pos=globalenv())
+    assign("Z",Zin,.GlobalEnv)
+    Z <- get("Z", pos=globalenv())
+    assign("k.beta",dim(X)[2],.GlobalEnv)
+    k.beta <- get("k.beta", pos=globalenv())
     if (is.null(W) == FALSE) {
-        k.alpha <<- dim(W)[2]
+        assign("k.alpha",dim(W)[2],.GlobalEnv)
+        k.alpha <- get("k.alpha", pos=globalenv())
     }
     else {
-        k.alpha <<- 0
+        assign("k.alpha",0,.GlobalEnv)
+        k.alpha <- get("k.alpha", pos=globalenv())
     }
     if (is.null(Z) == FALSE) {
-        k.gamma <<- dim(Z)[2]
+        assign("k.gamma",dim(Z)[2],.GlobalEnv)
+        k.gamma <- get("k.gamma", pos=globalenv())
     }
     else {
-        k.gamma <<- 0
+        assign("k.gamma",0,.GlobalEnv)
+        k.gamma <- get("k.gamma", pos=globalenv())
     }
-    n <<- length(Y)
+    assign("n",length(Y),.GlobalEnv)
+    n <- get("n", pos=globalenv())
     ausgabe <- mle.zigp(Y, X, W, Z, Offset = Offset, init = init)
     hat.beta <- ausgabe$Coefficients.Mu
     if (is.null(W) == FALSE) {

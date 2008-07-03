@@ -2,17 +2,26 @@ mle.zigp.full.like <-
 function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
     plot = FALSE, method = "CG")
 {
-    X <<- Xein
-    Y <<- Yein
+    assign("Y",Yein,.GlobalEnv)
+    Y <- get("Y", pos=globalenv())
+    assign("X",Xein,.GlobalEnv)
+    X <- get("X", pos=globalenv())
+    W <- get("W", pos=globalenv())
+    Z <- get("Z", pos=globalenv())
     if (is.matrix(X)) {
-        n <<- dim(X)[1]
-        k <<- dim(X)[2]
+        assign("n",dim(X)[1],.GlobalEnv)
+        n <- get("n", pos=globalenv())
+        assign("k",dim(X)[2],.GlobalEnv)
+        k <- get("k", pos=globalenv())
     }
     else {
-        n <<- length(X)
-        k <<- 1
+        assign("n",length(X),.GlobalEnv)
+        n <- get("n", pos=globalenv())
+        assign("k",1,.GlobalEnv)
+        k <- get("k", pos=globalenv())
     }
-    t.i <<- Offset
+    assign("t.i",Offset,.GlobalEnv)
+    t.i <- get("t.i", pos=globalenv())
     alpha <- log(sqrt(var(Y)/mean(Y)))
     gamma <- -log(4)
     beta <- summary(glm(Y ~ offset(log(t.i)) + X - 1, family = poisson))$coefficients[,
@@ -49,23 +58,24 @@ function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
     RSS <- sum(res^2)
     AIC <- -2 * loglikelihood + 2 * (k + 2)
     range.mu <- c(min(fit$mu), max(fit$mu))
-    ausgabe <<- list(ZI.Parameter = omega, Coefficients = beta,
+    assign("ausgabe",list(ZI.Parameter = omega, Coefficients = beta,
         AIC = AIC, Dispersion.Parameter = phi, Range.mu = range.mu,
         Log.Likelihood = loglikelihood, Residuals = res, RSS = RSS,
         Iterations = it,
         Message = message, Response = Y,
-        Fitted.Values = fit$fit, Design = X)
-    if (plot) {
-        plot.zigp1(ausgabe)
-        if (summary)
-            summaryzigp1(ausgabe)
-    }
-    else {
+        Fitted.Values = fit$fit, Design = X),.GlobalEnv)
+    ausgabe <- get("ausgabe", pos=globalenv())
+    #if (plot) {
+    #    plot.zigp1(ausgabe)
+    #    if (summary)
+    #        summaryzigp1(ausgabe)
+    #}
+    #else {
         if (summary) {
             summaryzigp1(ausgabe)
         }
         else {
             return(ausgabe)
         }
-    }
+    #}
 }

@@ -15,8 +15,8 @@ and zero-inflation level. Therefore, three design matrices are allowed.
 \tabular{ll}{
 Package: \tab ZIGP\cr
 Type: \tab Package\cr
-Version: \tab 2.1\cr
-Date: \tab 2008-03-24\cr
+Version: \tab 2.3\cr
+Date: \tab 2008-07-03\cr
 License: \tab GPL (>= 3)\cr
 }
 Distribution functions in R notation are 'dzigp', 'pzigp', 'qzigp', 'rzigp'.
@@ -30,6 +30,9 @@ elimination of non-significant effects.
 Other useful functions are 'loglikelihood.zigp', which evaluates the 
 loglikelihood function on the given parameter value. Scores can be calculated
 using 'gradient', the Fisher Information matrix using 'FM'.
+
+Nonnested model comparison can be done using a test proposed by Vuong which
+is implemented in function 'vuong'.
 }
 \author{
 Vinzenz Erhardt
@@ -46,7 +49,11 @@ Masterthesis in German:
 Erhardt, Vinzenz. Verallgemeinerte Poisson und Nullenueberschuss- 
 Regressionsmodelle mit regressiertem Erwartungswert, Dispersions- und 
 Nullenüberschuß-Parameter und eine Anwendung zur Patentmodellierung. 
-("http://www-m4.ma.tum.de/Diplarb/"), 2006
+("http://www-m4.ma.tum.de/Diplarb/"), 2006.
+
+Vuong, Q.H. (1989). Likelihood Ratio tests for model selection and nonnested
+hypotheses.
+Econometrica 57(2), 307-333.
 }
 \keyword{ models }
 \keyword{ regression }

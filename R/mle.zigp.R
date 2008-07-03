@@ -1,36 +1,58 @@
 mle.zigp <-
 function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
-    init = FALSE)
+    init = TRUE)
 {
-    Y <<- Yin
-    X <<- Xin
-    W <<- Win
-    Z <<- Zin
+
+    assign("Y",Yin,.GlobalEnv)
+    Y <- get("Y", pos=globalenv())
+    assign("X",Xin,.GlobalEnv)
+    X <- get("X", pos=globalenv())
+    assign("W",Win,.GlobalEnv)
+    W <- get("W", pos=globalenv())
+    assign("Z",Zin,.GlobalEnv)
+    Z <- get("Z", pos=globalenv())
     if (is.matrix(X)) {
-        n <- dim(X)[1]
-        k.beta <<- dim(X)[2]
+        assign("n",dim(X)[1],.GlobalEnv)
+        n <- get("n", pos=globalenv())
+        assign("k.beta",dim(X)[2],.GlobalEnv)
+        k.beta <- get("k.beta", pos=globalenv())
     }
     else {
-        n <- length(X)
-        k.beta <<- 1
+        assign("n",length(X),.GlobalEnv)
+        n <- get("n", pos=globalenv())
+        assign("k.beta",1,.GlobalEnv)
+        k.beta <- get("k.beta", pos=globalenv())
     }
     if (is.null(W) == FALSE) {
         if (is.matrix(W)) {
-            k.alpha <<- dim(W)[2]
+            assign("k.alpha",dim(W)[2],.GlobalEnv)
+            k.alpha <- get("k.alpha", pos=globalenv())
         }
         else {
-            k.alpha <<- 1
+            assign("k.alpha",1,.GlobalEnv)
+            k.alpha <- get("k.alpha", pos=globalenv())
         }
+    }
+    else { 
+        assign("k.alpha",0,.GlobalEnv)
+        k.alpha <- get("k.alpha", pos=globalenv())
     }
     if (is.null(Z) == FALSE) {
         if (is.matrix(Z)) {
-            k.gamma <<- dim(Z)[2]
+            assign("k.gamma",dim(Z)[2],.GlobalEnv)
+            k.gamma <- get("k.gamma", pos=globalenv())
         }
         else {
-            k.gamma <<- 1
+            assign("k.gamma",1,.GlobalEnv)
+            k.gamma <- get("k.gamma", pos=globalenv())
         }
     }
-    t.i <<- Offset
+    else { 
+        assign("k.gamma",0,.GlobalEnv)
+        k.gamma <- get("k.gamma", pos=globalenv())
+    }
+    assign("t.i",Offset,.GlobalEnv)
+    t.i <- get("t.i", pos=globalenv())
     if (init) {
 
         start.delta <- optimized.run(Y, X, W, Z)
@@ -88,6 +110,8 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     delta <- opt$par
     it <- opt$counts
     loglikelihood <- -opt$value
+    llvuong <- loglikelihood.zigp.vuong(delta)
+
     if (is.null(opt$message)) {
         message <- "NULL"
     }
@@ -148,6 +172,8 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         Residuals = res, Pearson = chsq, AIC = AIC, Iterations = it,
         Message = message, Response = Y,
         Fitted.Values = fit$fit, Design.Mu = X, Design.Phi = W,
-        Design.Omega = Z)
+        Design.Omega = Z,
+        Loglike.Vuong = llvuong)
     return(mle.data)
 }
+

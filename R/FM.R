@@ -1,6 +1,9 @@
 FM <-
 function (beta, alpha, gamma, X, W, Z, Offset = NULL)
 {
+
+    n <- dim(W)[1]
+
     k.beta <- length(beta)
     k.alpha <- length(alpha)
     k.gamma <- length(gamma)
@@ -32,7 +35,8 @@ function (beta, alpha, gamma, X, W, Z, Offset = NULL)
         mu <- exp(eta.mu)
     }
     else {
-        t.i <<- Offset
+        assign("t.i",Offset,.GlobalEnv)
+        t.i <- get("t.i", pos=globalenv())
         mu <- t.i * exp(eta.mu)
     }
     if (is.null(W) == FALSE) {

@@ -1,6 +1,10 @@
 optimized.run <-
 function (Y, X, W, Z)
 {
+
+    n <- get("n")
+    t.i <- get("t.i")
+
     out <- mle.zigp.full.like(Y, X, Offset = t.i, summary = FALSE)
     beta.start <- out$Coefficients
     if (is.null(W) == FALSE) {

@@ -1,4 +1,4 @@
-loglikelihood.zigp <-
+loglikelihood.zigp.vuong <-
 function (delta)
 {
 
@@ -15,8 +15,8 @@ function (delta)
     eta.mu <- double(n)
     eta.phi <- double(n)
     eta.omega <- double(n)
-    s1 <- double(1)
-    s2 <- double(1)
+    s1 <- double(n)
+    s2 <- double(n)
     if (k.beta == 1) {
         eta.mu <- X * delta[1]
     }
@@ -61,17 +61,17 @@ function (delta)
     temp1 <- (mu.i + b.i * Y)
 
     if (is.null(Z) == FALSE) {
-      s1 <- sum(ifelse(Y == 0, 1, 0) * (log(k.i + exp(-1/phi.i *
-          mu.i)) - log(1 + k.i)))
-    }
-    else {
-      s1 <- sum(ifelse(Y == 0, 1, 0) * (-1/phi.i *
-            mu.i))
-    }
-    s2 <- sum(ifelse(Y > 0, 1, 0) * (-log(1 + k.i) + log(t.i) +
-        eta.mu + (Y - 1) * log(temp1) - Y * log(phi.i) - 1/phi.i *
-        temp1 - lgamma(Y + 1)))
+        s1 <- ifelse(Y == 0, 1, 0) * (log(k.i + exp(-1/phi.i *
+              mu.i)) - log(1 + k.i))
+      }
+      else {
+        s1 <- ifelse(Y == 0, 1, 0) * (-1/phi.i *
+            mu.i)
+      }
+      s2 <- ifelse(Y > 0, 1, 0) * (-log(1 + k.i) + log(t.i) +
+          eta.mu + (Y - 1) * log(temp1) - Y * log(phi.i) - 1/phi.i *
+          temp1 - lgamma(Y + 1))
     l <- s1 + s2
-    return(-l)
+    return(l)
 }
 
