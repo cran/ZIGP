@@ -13,16 +13,28 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     assign("k.beta",dim(X)[2],.GlobalEnv)
     k.beta <- get("k.beta", pos=globalenv())
     if (is.null(W) == FALSE) {
-        assign("k.alpha",dim(W)[2],.GlobalEnv)
-        k.alpha <- get("k.alpha", pos=globalenv())
+        if (is.matrix(W)) {
+            assign("k.alpha",dim(W)[2],.GlobalEnv)
+            k.alpha <- get("k.alpha", pos=globalenv())
+        }
+        else {
+            assign("k.alpha",1,.GlobalEnv)
+            k.alpha <- get("k.alpha", pos=globalenv())
+        }
     }
     else {
         assign("k.alpha",0,.GlobalEnv)
         k.alpha <- get("k.alpha", pos=globalenv())
     }
     if (is.null(Z) == FALSE) {
-        assign("k.gamma",dim(Z)[2],.GlobalEnv)
-        k.gamma <- get("k.gamma", pos=globalenv())
+        if (is.matrix(Z)) {
+            assign("k.gamma",dim(Z)[2],.GlobalEnv)
+            k.gamma <- get("k.gamma", pos=globalenv())
+        }
+        else {
+            assign("k.gamma",1,.GlobalEnv)
+            k.gamma <- get("k.gamma", pos=globalenv())
+        }
     }
     else {
         assign("k.gamma",0,.GlobalEnv)
