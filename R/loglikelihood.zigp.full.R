@@ -1,13 +1,13 @@
 loglikelihood.zigp.full <-
 function (delta)
 {
-    n <- get("n")
-    k <- get("k")
-    X <- get("X")
-    W <- get("W")
-    Z <- get("Z")
-    Y <- get("Y")
-    t.i <- get("t.i")
+    n <- get("n", pos=globalenv())
+    k <- get("k", pos=globalenv())
+    X <- get("X", pos=globalenv())
+    W <- get("W", pos=globalenv())
+    Z <- get("Z", pos=globalenv())
+    Y <- get("Y", pos=globalenv())
+    t.i <- get("t.i", pos=globalenv())
 
     eta <- double(n)
     s1 <- double(1)

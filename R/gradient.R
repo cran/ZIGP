@@ -3,12 +3,12 @@ function(delta)
 
 {
 
-  n <- get("n")
-  k.beta <- get("k.beta")
-  k.alpha <- get("k.alpha")
-  k.gamma <- get("k.gamma")
-  Y <- get("Y")
-  t.i <- get("t.i")
+  n <- get("n", pos=globalenv())
+  k.beta <- get("k.beta", pos=globalenv())
+  k.alpha <- get("k.alpha", pos=globalenv())
+  k.gamma <- get("k.gamma", pos=globalenv())
+  Y <- get("Y", pos=globalenv())
+  t.i <- get("t.i", pos=globalenv())
   
   grad <- double(k.beta + k.alpha + k.gamma)
 

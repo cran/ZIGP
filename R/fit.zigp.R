@@ -3,14 +3,14 @@ function(delta)
 
 {
 
-    n <- get("n")
-    k.beta <- get("k.beta")
-    k.alpha <- get("k.alpha")
-    k.gamma <- get("k.gamma")
-    X <- get("X")
-    W <- get("W")
-    Z <- get("Z")
-    t.i <- get("t.i")
+    n <- get("n", pos=globalenv())
+    k.beta <- get("k.beta", pos=globalenv())
+    k.alpha <- get("k.alpha", pos=globalenv())
+    k.gamma <- get("k.gamma", pos=globalenv())
+    X <- get("X", pos=globalenv())
+    W <- get("W", pos=globalenv())
+    Z <- get("Z", pos=globalenv())
+    t.i <- get("t.i", pos=globalenv())
     
     eta.mu <- double(n)
 

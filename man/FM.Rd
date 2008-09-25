@@ -23,6 +23,7 @@ FM(beta, alpha, gamma, X, W, Z, Offset = NULL)
 X <- matrix(c(1:3,4,3,5),3,2)
 W <- c(3,-4,-1)
 Z <- rep(1,3)
+n <- 3
 beta  <- c(5,-2)
 alpha <- 3.4
 gamma <- -10

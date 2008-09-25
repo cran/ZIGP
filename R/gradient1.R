@@ -3,10 +3,10 @@ function(delta)
 
 {
 
-  k <- get("k")
-  n <- get("n")
-  Y <- get("Y")
-  t.i <- get("t.i")
+  k <- get("k", pos=globalenv())
+  n <- get("n", pos=globalenv())
+  Y <- get("Y", pos=globalenv())
+  t.i <- get("t.i", pos=globalenv())
   grad <- double(2+k)
 
   eta <- double(n)

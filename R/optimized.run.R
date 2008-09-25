@@ -2,8 +2,8 @@ optimized.run <-
 function (Y, X, W, Z)
 {
 
-    n <- get("n")
-    t.i <- get("t.i")
+    n <- get("n", pos=globalenv())
+    t.i <- get("t.i", pos=globalenv())
 
     out <- mle.zigp.full.like(Y, X, Offset = t.i, summary = FALSE)
     beta.start <- out$Coefficients

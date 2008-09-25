@@ -2,7 +2,7 @@ FM <-
 function (beta, alpha, gamma, X, W, Z, Offset = NULL)
 {
 
-    n <- dim(W)[1]
+    n <- get("n", pos=globalenv())
 
     k.beta <- length(beta)
     k.alpha <- length(alpha)
