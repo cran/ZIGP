@@ -4,18 +4,18 @@ function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
 {
     assign("Y",Yein,.GlobalEnv)
     Y <- get("Y", pos=globalenv())
-    assign("X",Xein,.GlobalEnv)
-    X <- get("X", pos=globalenv())
-    W <- get("W", pos=globalenv())
-    Z <- get("Z", pos=globalenv())
-    if (is.matrix(X)) {
-        assign("n",dim(X)[1],.GlobalEnv)
+    assign("Xsave",Xein,.GlobalEnv)
+    Xsave <- get("Xsave", pos=globalenv())
+    Wsave <- get("Wsave", pos=globalenv())
+    Zsave <- get("Zsave", pos=globalenv())
+    if (is.matrix(Xsave)) {
+        assign("n",dim(Xsave)[1],.GlobalEnv)
         n <- get("n", pos=globalenv())
-        assign("k",dim(X)[2],.GlobalEnv)
+        assign("k",dim(Xsave)[2],.GlobalEnv)
         k <- get("k", pos=globalenv())
     }
     else {
-        assign("n",length(X),.GlobalEnv)
+        assign("n",length(Xsave),.GlobalEnv)
         n <- get("n", pos=globalenv())
         assign("k",1,.GlobalEnv)
         k <- get("k", pos=globalenv())
@@ -24,7 +24,7 @@ function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
     t.i <- get("t.i", pos=globalenv())
     alpha <- log(sqrt(var(Y)/mean(Y)))
     gamma <- -log(4)
-    beta <- summary(glm(Y ~ offset(log(t.i)) + X - 1, family = poisson))$coefficients[,
+    beta <- summary(glm(Y ~ offset(log(t.i)) + Xsave - 1, family = poisson))$coefficients[,
         1]
     start.delta <- c(alpha, gamma, beta)
     
@@ -38,13 +38,13 @@ function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
     message <- opt$message
     coef <- double(k + 2)
     coef <- delta
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         phi <- 1 + exp(coef[1])
     }
     else {
         phi <- 1
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         omega <- exp(coef[2])/(1 + exp(coef[2]))
     }
     else {
@@ -63,7 +63,7 @@ function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
         Log.Likelihood = loglikelihood, Residuals = res, RSS = RSS,
         Iterations = it,
         Message = message, Response = Y,
-        Fitted.Values = fit$fit, Design = X),.GlobalEnv)
+        Fitted.Values = fit$fit, Design = Xsave),.GlobalEnv)
     ausgabe <- get("ausgabe", pos=globalenv())
     #if (plot) {
     #    plot.zigp1(ausgabe)

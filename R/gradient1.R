@@ -19,9 +19,9 @@ function(delta)
 
     if(k == 1) {
 
-      eta <- X * delta[3]
+      eta <- Xsave * delta[3]
 
-      X <- cbind(X,rep(0,length(X)))
+      Xsave <- cbind(Xsave,rep(0,length(Xsave)))
 
     }
 
@@ -29,7 +29,7 @@ function(delta)
 
       beta <- delta[3:(k+2)]
 
-      eta <- X %*% beta
+      eta <- Xsave %*% beta
 
     }
 
@@ -81,11 +81,11 @@ for (j in 1:k)
 
 # terms of gradient with 1_{Y_i = 0}
 
-    s1 <- sum(ifelse(Y == 0,1,0)* X[,j]*(P0*(-1/phi)*mu.i/(omega/(1-omega)+P0)))
+    s1 <- sum(ifelse(Y == 0,1,0)* Xsave[,j]*(P0*(-1/phi)*mu.i/(omega/(1-omega)+P0)))
 
 # terms of gradient with 1_{Y_i > 0}
 
-    s2 <- sum(ifelse(Y>0,1,0)* X[,j]*(1+(Y-1)*mu.i/(mu.i+(phi-1)*Y)-1/phi*mu.i))
+    s2 <- sum(ifelse(Y>0,1,0)* Xsave[,j]*(1+(Y-1)*mu.i/(mu.i+(phi-1)*Y)-1/phi*mu.i))
 
   grad[2+j] <- s1 + s2
 

@@ -5,7 +5,7 @@ function(delta)
 
         n <- get("n", pos=globalenv())
         k <- get("k", pos=globalenv())
-        X <- get("X", pos=globalenv())
+        Xsave <- get("Xsave", pos=globalenv())
         t.i <- get("t.i", pos=globalenv())
         
         eta <- double(n)
@@ -20,7 +20,7 @@ function(delta)
 
         if(k == 1) {
 
-                        eta <- delta[3] * X
+                        eta <- delta[3] * Xsave
 
                 }
 
@@ -28,7 +28,7 @@ function(delta)
 
                         beta<-delta[3:(k+2)]
 
-                        eta <- X%*%beta
+                        eta <- Xsave%*%beta
 
                         }
 

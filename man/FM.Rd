@@ -19,6 +19,9 @@ FM(beta, alpha, gamma, X, W, Z, Offset = NULL)
   \item{Offset}{ exposure for individual observation lengths. Defaults to a vector of 1.
           The offset MUST NOT be in 'log' scale. }
 }
+\details{
+n has to be defined as the number of observations.
+}
 \examples{
 X <- matrix(c(1:3,4,3,5),3,2)
 W <- c(3,-4,-1)

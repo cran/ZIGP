@@ -25,10 +25,10 @@ convergence speed and ensures correct convergence even if the log
 likelihood function is not continuous due to the indicator function of 
 the ZI parameter.
 
-The design matrices have to be defined as X (for mean), W (for overdispersion)
-and Z (for ZI).
+The design matrices have to be defined as Xsave (for mean), Wsave (for overdispersion)
+and Zsave (for ZI).
 
-n has to be defined as the number of observations dim(X)[1].
+n has to be defined as the number of observations.
 
 k.beta has to be defined as the length of beta.
 
@@ -40,10 +40,10 @@ t.i has to be defined as the exposure.
 }
 \examples{
 Y <- c(3,0,2)
-X <- matrix(c(1:3,4,3,5),3,2)
-W <- c(3,-4,-1)
-Z <- rep(1,3)
-n <- dim(X)[1]
+Xsave <- matrix(c(1:3,4,3,5),3,2)
+Wsave <- c(3,-4,-1)
+Zsave <- rep(1,3)
+n <- dim(Xsave)[1]
 beta  <- c(5,-2)
 alpha <- 3.4
 gamma <- -10

@@ -7,9 +7,9 @@ function(delta)
     k.beta <- get("k.beta", pos=globalenv())
     k.alpha <- get("k.alpha", pos=globalenv())
     k.gamma <- get("k.gamma", pos=globalenv())
-    X <- get("X", pos=globalenv())
-    W <- get("W", pos=globalenv())
-    Z <- get("Z", pos=globalenv())
+    Xsave <- get("Xsave", pos=globalenv())
+    Wsave <- get("Wsave", pos=globalenv())
+    Zsave <- get("Zsave", pos=globalenv())
     t.i <- get("t.i", pos=globalenv())
     
     eta.mu <- double(n)
@@ -30,7 +30,7 @@ function(delta)
 
     if(k.beta == 1) {
 
-      eta.mu <- X * delta[1]
+      eta.mu <- Xsave * delta[1]
 
     }
 
@@ -38,16 +38,16 @@ function(delta)
 
       beta <- delta[1:k.beta]
 
-      eta.mu <- X %*% beta
+      eta.mu <- Xsave %*% beta
 
     }
 
 
-  if(is.null(W)==FALSE){
+  if(is.null(Wsave)==FALSE){
 
     if(k.alpha == 1) {
 
-      eta.phi <- W * delta[k.beta + 1]
+      eta.phi <- Wsave * delta[k.beta + 1]
 
     }
 
@@ -55,17 +55,17 @@ function(delta)
 
       alpha <- delta[(k.beta + 1) : (k.beta + k.alpha)]
 
-      eta.phi <- W %*% alpha
+      eta.phi <- Wsave %*% alpha
 
     }
     
   }
 
-  if(is.null(Z)==FALSE){
+  if(is.null(Zsave)==FALSE){
 
     if(k.gamma == 1) {
 
-      eta.omega <- Z * delta[k.beta + k.alpha + 1]
+      eta.omega <- Zsave * delta[k.beta + k.alpha + 1]
 
     }
 
@@ -73,7 +73,7 @@ function(delta)
 
       gamma <- delta[(k.beta + k.alpha + 1) : (k.beta + k.alpha + k.gamma)]
 
-      eta.omega <- Z %*% gamma
+      eta.omega <- Zsave %*% gamma
 
     }
     
@@ -85,11 +85,11 @@ function(delta)
 
     mu <- t.i*exp(eta.mu)
 
-    if(is.null(W)==FALSE){ phi <- 1 + exp(eta.phi) }
+    if(is.null(Wsave)==FALSE){ phi <- 1 + exp(eta.phi) }
     
     else { phi <- 1 }
 
-    if(is.null(W)==FALSE){ omega <- exp(eta.omega)/(1+exp(eta.omega)) }
+    if(is.null(Wsave)==FALSE){ omega <- exp(eta.omega)/(1+exp(eta.omega)) }
     
     else { omega <- 0 }
 

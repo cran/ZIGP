@@ -76,6 +76,24 @@ wald.test(Yin=Y, Xin=X, Win=W, Zin=Z, Offset = insurance.year, init = FALSE)
 #16               Range Mu                   0.23      2.45               
 #17              Range Phi                   1.00      2.19               
 #18            Range Omega                   0.25      0.50               
+
+
+# approximate equivalence of Poisson-glm and ZIGP-package results
+# glm uses IWLS, ZIGP uses numerical maximization of the log-likelihood
+# (time series character of the data is neglected)
+
+data(Seatbelts)
+DriversKilled <- as.vector(Seatbelts[,1]) # will be response
+kms <- as.vector(Seatbelts[,5])           # will be exposure
+PetrolPrice <- as.vector(Seatbelts[,6])   # will be covariate 1
+law <- as.vector(Seatbelts[,8])           # will be covariate 2
+
+fmla <- DriversKilled ~ PetrolPrice + law
+out.glm <- glm(fmla, family=poisson, offset=log(kms))
+summary(out.glm)
+
+X <- cbind(rep(1,length(DriversKilled)),PetrolPrice,law)
+wald.test(DriversKilled, X, NULL, NULL, Offset = kms)
 }
 \keyword{ models }% at least one, from doc/KEYWORDS
 

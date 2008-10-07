@@ -4,17 +4,17 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
 {
     assign("Y",Yin,.GlobalEnv)
     Y <- get("Y", pos=globalenv())
-    assign("X",Xin,.GlobalEnv)
-    X <- get("X", pos=globalenv())
-    assign("W",Win,.GlobalEnv)
-    W <- get("W", pos=globalenv())
-    assign("Z",Zin,.GlobalEnv)
-    Z <- get("Z", pos=globalenv())
-    assign("k.beta",dim(X)[2],.GlobalEnv)
+    assign("Xsave",Xin,.GlobalEnv)
+    Xsave <- get("Xsave", pos=globalenv())
+    assign("Wsave",Win,.GlobalEnv)
+    Wsave <- get("Wsave", pos=globalenv())
+    assign("Zsave",Zin,.GlobalEnv)
+    Zsave <- get("Zsave", pos=globalenv())
+    assign("k.beta",dim(Xsave)[2],.GlobalEnv)
     k.beta <- get("k.beta", pos=globalenv())
-    if (is.null(W) == FALSE) {
-        if (is.matrix(W)) {
-            assign("k.alpha",dim(W)[2],.GlobalEnv)
+    if (is.null(Wsave) == FALSE) {
+        if (is.matrix(Wsave)) {
+            assign("k.alpha",dim(Wsave)[2],.GlobalEnv)
             k.alpha <- get("k.alpha", pos=globalenv())
         }
         else {
@@ -26,9 +26,9 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         assign("k.alpha",0,.GlobalEnv)
         k.alpha <- get("k.alpha", pos=globalenv())
     }
-    if (is.null(Z) == FALSE) {
-        if (is.matrix(Z)) {
-            assign("k.gamma",dim(Z)[2],.GlobalEnv)
+    if (is.null(Zsave) == FALSE) {
+        if (is.matrix(Zsave)) {
+            assign("k.gamma",dim(Zsave)[2],.GlobalEnv)
             k.gamma <- get("k.gamma", pos=globalenv())
         }
         else {
@@ -42,30 +42,30 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     }
     assign("n",length(Y),.GlobalEnv)
     n <- get("n", pos=globalenv())
-    ausgabe <- mle.zigp(Y, X, W, Z, Offset = Offset, init = init)
+    ausgabe <- mle.zigp(Y, Xsave, Wsave, Zsave, Offset = Offset, init = init)
     hat.beta <- ausgabe$Coefficients.Mu
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         hat.alpha <- ausgabe$Coefficients.Phi
     }
     else {
         hat.alpha <- NULL
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         hat.gamma <- ausgabe$Coefficients.Omega
     }
     else {
         hat.gamma <- NULL
     }
-    B <- FM(hat.beta, hat.alpha, hat.gamma, X, W, Z, Offset = Offset)
+    B <- FM(hat.beta, hat.alpha, hat.gamma, Xsave, Wsave, Zsave, Offset = Offset)
     sd.vector <- sqrt(diag(solve(B, tol = 1e-50)))
     hat.sd.beta <- sd.vector[1:k.beta]
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         hat.sd.alpha <- sd.vector[(k.beta + 1):(k.beta + k.alpha)]
     }
     else {
         hat.sd.alpha <- NULL
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         hat.sd.gamma <- sd.vector[(k.beta + k.alpha + 1):(k.beta +
             k.alpha + k.gamma)]
     }
@@ -73,27 +73,27 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         hat.sd.gamma <- NULL
     }
     z.stat.beta <- hat.beta/hat.sd.beta
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         z.stat.alpha <- hat.alpha/hat.sd.alpha
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         z.stat.gamma <- hat.gamma/hat.sd.gamma
     }
     p.value.beta <- 2 * pnorm(-abs(z.stat.beta))
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         p.value.alpha <- 2 * pnorm(-abs(z.stat.alpha))
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         p.value.gamma <- 2 * pnorm(-abs(z.stat.gamma))
     }
     glimpse.beta <- rep("", length(z.stat.beta))
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         glimpse.alpha <- rep("", length(z.stat.alpha))
     }
     else {
         glimpse.alpha <- NULL
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         glimpse.gamma <- rep("", length(z.stat.gamma))
     }
     else {
@@ -113,7 +113,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
             glimpse.beta[i] <- "."
         }
     }
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         for (i in 1:length(z.stat.alpha)) {
             if (p.value.alpha[i] < 0.001) {
                 glimpse.alpha[i] <- "***"
@@ -132,7 +132,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
             }
         }
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         for (i in 1:length(z.stat.gamma)) {
             if (p.value.gamma[i] < 0.001) {
                 glimpse.gamma[i] <- "***"
@@ -152,14 +152,14 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         }
     }
     coef.names.beta <- c("", paste("b", c(0:(k.beta - 1)), sep = ""))
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         coef.names.alpha <- c("", paste("a", c(0:(k.alpha - 1)),
             sep = ""))
     }
     else {
         coef.names.alpha <- NULL
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         coef.names.gamma <- c("", paste("g", c(0:(k.gamma - 1)),
             sep = ""))
     }
@@ -167,58 +167,58 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         coef.names.gamma <- NULL
     }
     coef.desc.beta <- double(k.beta)
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         coef.desc.alpha <- double(k.alpha)
     }
     else {
         coef.desc.alpha <- NULL
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         coef.desc.gamma <- double(k.gamma)
     }
     else {
         coef.desc.gamma <- NULL
     }
     for (i in 1:k.beta) {
-        coef.desc.beta[i] <- colnames(X, do.NULL = FALSE)[i]
-        if (is.matrix(X)) {
-            if (max(X[, i]) == 1 & min(X[, i]) == 1) {
+        coef.desc.beta[i] <- colnames(Xsave, do.NULL = FALSE)[i]
+        if (is.matrix(Xsave)) {
+            if (max(Xsave[, i]) == 1 & min(Xsave[, i]) == 1) {
                 coef.desc.beta[i] <- "Intercept"
             }
         }
         else {
-            if (max(X[i]) == 1 & min(X[i]) == 1) {
+            if (max(Xsave[i]) == 1 & min(Xsave[i]) == 1) {
                 coef.desc.beta[i] <- "Intercept"
             }
         }
     }
     coef.desc.beta <- c("MU REGRESSION", coef.desc.beta)
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         for (i in 1:k.alpha) {
-            coef.desc.alpha[i] <- colnames(W, do.NULL = FALSE)[i]
-            if (is.matrix(W)) {
-                if (max(W[, i]) == 1 & min(W[, i]) == 1) {
+            coef.desc.alpha[i] <- colnames(Wsave, do.NULL = FALSE)[i]
+            if (is.matrix(Wsave)) {
+                if (max(Wsave[, i]) == 1 & min(Wsave[, i]) == 1) {
                   coef.desc.alpha[i] <- "Intercept"
                 }
             }
             else {
-                if (max(W[i]) == 1 & min(W[i]) == 1) {
+                if (max(Wsave[i]) == 1 & min(Wsave[i]) == 1) {
                   coef.desc.alpha[i] <- "Intercept"
                 }
             }
         }
         coef.desc.alpha <- c("PHI REGRESSION", coef.desc.alpha)
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         for (i in 1:k.gamma) {
-            coef.desc.gamma[i] <- colnames(Z, do.NULL = FALSE)[i]
-            if (is.matrix(Z)) {
-                if (max(Z[, i]) == 1 & min(Z[, i]) == 1) {
+            coef.desc.gamma[i] <- colnames(Zsave, do.NULL = FALSE)[i]
+            if (is.matrix(Zsave)) {
+                if (max(Zsave[, i]) == 1 & min(Zsave[, i]) == 1) {
                   coef.desc.gamma[i] <- "Intercept"
                 }
             }
             else {
-                if (max(Z[i]) == 1 & min(Z[i]) == 1) {
+                if (max(Zsave[i]) == 1 & min(Zsave[i]) == 1) {
                   coef.desc.gamma[i] <- "Intercept"
                 }
             }
@@ -226,15 +226,15 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         coef.desc.gamma <- c("OMEGA REGRESSION", coef.desc.gamma)
     }
     p.value.beta2 <- p.value.beta
-    if (is.null(W) == FALSE) { p.value.alpha2 <- p.value.alpha }
-    if (is.null(Z) == FALSE) { p.value.gamma2 <- p.value.gamma }
+    if (is.null(Wsave) == FALSE) { p.value.alpha2 <- p.value.alpha }
+    if (is.null(Zsave) == FALSE) { p.value.gamma2 <- p.value.gamma }
     for (i in 1:k.beta) {
       p.value.beta2[i] <- ifelse(p.value.beta[i]<10^(-16),"<2e-16",
               as.character(formatC(p.value.beta[i],
               ifelse(p.value.beta[i]<10^(-4),3,4),
               format=ifelse(p.value.beta[i]<10^(-4),"g","f")))) }
       p.value.beta <- p.value.beta2
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         hat.alpha <- c("", as.character(formatC(hat.alpha, 5,
             format = "f")))
         hat.sd.alpha <- c("", as.character(formatC(hat.sd.alpha,
@@ -255,7 +255,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         z.stat.alpha <- NULL
         p.value.alpha <- NULL
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         hat.gamma <- c("", as.character(formatC(hat.gamma, 5,
             format = "f")))
         hat.sd.gamma <- c("", as.character(formatC(hat.sd.gamma,

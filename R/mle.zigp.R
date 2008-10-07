@@ -5,27 +5,27 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
 
     assign("Y",Yin,.GlobalEnv)
     Y <- get("Y", pos=globalenv())
-    assign("X",Xin,.GlobalEnv)
-    X <- get("X", pos=globalenv())
-    assign("W",Win,.GlobalEnv)
-    W <- get("W", pos=globalenv())
-    assign("Z",Zin,.GlobalEnv)
-    Z <- get("Z", pos=globalenv())
-    if (is.matrix(X)) {
-        assign("n",dim(X)[1],.GlobalEnv)
+    assign("Xsave",Xin,.GlobalEnv)
+    Xsave <- get("Xsave", pos=globalenv())
+    assign("Wsave",Win,.GlobalEnv)
+    Wsave <- get("Wsave", pos=globalenv())
+    assign("Zsave",Zin,.GlobalEnv)
+    Zsave <- get("Zsave", pos=globalenv())
+    if (is.matrix(Xsave)) {
+        assign("n",dim(Xsave)[1],.GlobalEnv)
         n <- get("n", pos=globalenv())
-        assign("k.beta",dim(X)[2],.GlobalEnv)
+        assign("k.beta",dim(Xsave)[2],.GlobalEnv)
         k.beta <- get("k.beta", pos=globalenv())
     }
     else {
-        assign("n",length(X),.GlobalEnv)
+        assign("n",length(Xsave),.GlobalEnv)
         n <- get("n", pos=globalenv())
         assign("k.beta",1,.GlobalEnv)
         k.beta <- get("k.beta", pos=globalenv())
     }
-    if (is.null(W) == FALSE) {
-        if (is.matrix(W)) {
-            assign("k.alpha",dim(W)[2],.GlobalEnv)
+    if (is.null(Wsave) == FALSE) {
+        if (is.matrix(Wsave)) {
+            assign("k.alpha",dim(Wsave)[2],.GlobalEnv)
             k.alpha <- get("k.alpha", pos=globalenv())
         }
         else {
@@ -37,9 +37,9 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         assign("k.alpha",0,.GlobalEnv)
         k.alpha <- get("k.alpha", pos=globalenv())
     }
-    if (is.null(Z) == FALSE) {
-        if (is.matrix(Z)) {
-            assign("k.gamma",dim(Z)[2],.GlobalEnv)
+    if (is.null(Zsave) == FALSE) {
+        if (is.matrix(Zsave)) {
+            assign("k.gamma",dim(Zsave)[2],.GlobalEnv)
             k.gamma <- get("k.gamma", pos=globalenv())
         }
         else {
@@ -55,7 +55,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     t.i <- get("t.i", pos=globalenv())
     if (init) {
 
-        start.delta <- optimized.run(Y, X, W, Z)
+        start.delta <- optimized.run(Y, Xsave, Wsave, Zsave)
 
         opt <- optim(par = start.delta, fn = loglikelihood.zigp,
             gr = gradient, method = "BFGS")
@@ -89,19 +89,19 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         }
     }
     else {
-        if (is.null(W) == FALSE) {
+        if (is.null(Wsave) == FALSE) {
             alpha <- rep(-2.5, k.alpha)
         }
         else {
             alpha <- NULL
         }
-        if (is.null(Z) == FALSE) {
+        if (is.null(Zsave) == FALSE) {
             gamma <- rep(-2.5, k.gamma)
         }
         else {
             gamma <- NULL
         }
-        beta <- summary(glm(Y ~ offset(log(t.i)) + 1 + X, family = poisson(link = log)))$coefficients[,
+        beta <- summary(glm(Y ~ offset(log(t.i)) + 1 + Xsave, family = poisson(link = log)))$coefficients[,
             1]
         start.delta <- c(beta, alpha, gamma)
         opt <- optim(par = start.delta, fn = loglikelihood.zigp,
@@ -121,13 +121,13 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     AIC <- -2 * loglikelihood + 2 * (k.beta + k.alpha + k.gamma)
     coef <- delta
     beta <- coef[1:k.beta]
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         alpha <- coef[(k.beta + 1):(k.beta + k.alpha)]
     }
     else {
         alpha <- NULL
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         gamma <- coef[(k.beta + k.alpha + 1):(k.beta + k.alpha +
             k.gamma)]
     }
@@ -139,12 +139,12 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     chsq <- sum((Y - fit$fit)^2/((1 - fit$omega) * fit$mu * (fit$phi^2 +
         fit$mu * fit$omega)))
     range.mu <- c(min(fit$mu), max(fit$mu))
-    if (is.null(Z) == FALSE) {
-        if (is.matrix(Z)) {
-            eta.omega <- Z %*% gamma
+    if (is.null(Zsave) == FALSE) {
+        if (is.matrix(Zsave)) {
+            eta.omega <- Zsave %*% gamma
         }
         else {
-            eta.omega <- Z * gamma
+            eta.omega <- Zsave * gamma
         }
         omega <- exp(eta.omega)/(1 + exp(eta.omega))
     }
@@ -152,12 +152,12 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         omega <- rep(0, n)
     }
     range.omega <- c(min(omega), max(omega))
-    if (is.null(W) == FALSE) {
-        if (is.matrix(W)) {
-            eta.phi <- W %*% alpha
+    if (is.null(Wsave) == FALSE) {
+        if (is.matrix(Wsave)) {
+            eta.phi <- Wsave %*% alpha
         }
         else {
-            eta.phi <- W * alpha
+            eta.phi <- Wsave * alpha
         }
         phi <- 1 + exp(eta.phi)
     }
@@ -171,8 +171,8 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         Range.Omega = range.omega, Log.Likelihood = loglikelihood,
         Residuals = res, Pearson = chsq, AIC = AIC, Iterations = it,
         Message = message, Response = Y,
-        Fitted.Values = fit$fit, Design.Mu = X, Design.Phi = W,
-        Design.Omega = Z,
+        Fitted.Values = fit$fit, Design.Mu = Xsave, Design.Phi = Wsave,
+        Design.Omega = Zsave,
         Loglike.Vuong = llvuong)
     return(mle.data)
 }

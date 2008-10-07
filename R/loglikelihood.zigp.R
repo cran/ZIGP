@@ -6,9 +6,9 @@ function (delta)
     k.beta <- get("k.beta", pos=globalenv())
     k.alpha <- get("k.alpha", pos=globalenv())
     k.gamma <- get("k.gamma", pos=globalenv())
-    X <- get("X", pos=globalenv())
-    W <- get("W", pos=globalenv())
-    Z <- get("Z", pos=globalenv())
+    Xsave <- get("Xsave", pos=globalenv())
+    Wsave <- get("Wsave", pos=globalenv())
+    Zsave <- get("Zsave", pos=globalenv())
     Y <- get("Y", pos=globalenv())
     t.i <- get("t.i", pos=globalenv())
 
@@ -18,33 +18,33 @@ function (delta)
     s1 <- double(1)
     s2 <- double(1)
     if (k.beta == 1) {
-        eta.mu <- X * delta[1]
+        eta.mu <- Xsave * delta[1]
     }
     else {
         beta <- delta[1:k.beta]
-        eta.mu <- X %*% beta
+        eta.mu <- Xsave %*% beta
     }
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         if (k.alpha == 1) {
-            eta.phi <- W * delta[k.beta + 1]
+            eta.phi <- Wsave * delta[k.beta + 1]
         }
         else {
             alpha <- delta[(k.beta + 1):(k.beta + k.alpha)]
-            eta.phi <- W %*% alpha
+            eta.phi <- Wsave %*% alpha
         }
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         if (k.gamma == 1) {
-            eta.omega <- Z * delta[k.beta + k.alpha + 1]
+            eta.omega <- Zsave * delta[k.beta + k.alpha + 1]
         }
         else {
             gamma <- delta[(k.beta + k.alpha + 1):(k.beta + k.alpha +
                 k.gamma)]
-            eta.omega <- Z %*% gamma
+            eta.omega <- Zsave %*% gamma
         }
     }
     mu.i <- t.i * exp(eta.mu)
-    if (is.null(W) == FALSE) {
+    if (is.null(Wsave) == FALSE) {
         b.i <- exp(eta.phi)
         phi.i <- 1 + b.i
     }
@@ -52,7 +52,7 @@ function (delta)
         b.i <- rep(0, n)
         phi.i <- rep(1, n)
     }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
         k.i <- exp(eta.omega)
     }
     else {
@@ -60,7 +60,7 @@ function (delta)
     }
     temp1 <- (mu.i + b.i * Y)
 
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
       s1 <- sum(ifelse(Y == 0, 1, 0) * (log(k.i + exp(-1/phi.i *
           mu.i)) - log(1 + k.i)))
     }

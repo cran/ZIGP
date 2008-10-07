@@ -3,9 +3,9 @@ function (delta)
 {
     n <- get("n", pos=globalenv())
     k <- get("k", pos=globalenv())
-    X <- get("X", pos=globalenv())
-    W <- get("W", pos=globalenv())
-    Z <- get("Z", pos=globalenv())
+    Xsave <- get("Xsave", pos=globalenv())
+    Wsave <- get("Wsave", pos=globalenv())
+    Zsave <- get("Zsave", pos=globalenv())
     Y <- get("Y", pos=globalenv())
     t.i <- get("t.i", pos=globalenv())
 
@@ -13,15 +13,15 @@ function (delta)
     s1 <- double(1)
     s2 <- double(1)
     if (k == 1) {
-        eta <- delta[3] * X
+        eta <- delta[3] * Xsave
     }
     else {
         beta <- delta[3:(k + 2)]
-        eta <- X %*% beta
+        eta <- Xsave %*% beta
     }
-    if (is.null(W) == FALSE) { phi <- 1 + exp(delta[1]) }
+    if (is.null(Wsave) == FALSE) { phi <- 1 + exp(delta[1]) }
     else { phi <- 1 }
-    if (is.null(Z) == FALSE) {
+    if (is.null(Zsave) == FALSE) {
       if (exp(delta[2]) == Inf) { omega <- 1 }
       else { omega <- exp(delta[2])/(1 + exp(delta[2])) }
     }
