@@ -136,8 +136,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     }
     fit <- fit.zigp(delta)
     res <- Y - fit$fit
-    chsq <- sum((Y - fit$fit)^2/((1 - fit$omega) * fit$mu * (fit$phi^2 +
-        fit$mu * fit$omega)))
+    chsq <- sum((Y - fit$fit)^2/(fit$fit))
     range.mu <- c(min(fit$mu), max(fit$mu))
     if (is.null(Zsave) == FALSE) {
         if (is.matrix(Zsave)) {

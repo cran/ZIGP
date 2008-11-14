@@ -36,7 +36,8 @@ wald.test(Yin, Xin, Win=NULL, Zin=NULL, Offset = rep(1, length(Yin)), init = T)
      'W <- cbind(Intercept, gender, height)'.
 }
 \examples{
-## Number of damages in car insurance.
+# Number of damages in car insurance.
+# (not a good fit, just to illustrate how the software is used)
      
 damage <- c(0,1,0,0,0,4,2,0,1,0,1,1,0,2,0,0,1,0,0,1,0,0,0)
 Intercept <- rep(1,length(damage))
@@ -48,12 +49,12 @@ drivers.age <- c(25,19,30,48,30,18,19,29,24,54,56,20,38,18,23,58,
 brand <- c(1,2,1,3,3,2,2,1,1,3,2,2,1,3,1,3,2,2,1,1,3,3,2)
 brand2 <- ifelse(brand==2,1,0)
 brand3 <- ifelse(brand==3,1,0)
-W <- cbind(brand2,brand3)
 # abroad: driver has been abroad for longer time (=1)
 abroad <- c(0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,1,1,1,1)
 Y <- damage
 X <- cbind(Intercept, drivers.age)
-Z <- cbind(abroad)
+W <- cbind(brand2,brand3)
+Z <- cbind(abroad) # so name will be printed
 
 wald.test(Yin=Y, Xin=X, Win=W, Zin=Z, Offset = insurance.year, init = FALSE)     
 
@@ -94,6 +95,26 @@ summary(out.glm)
 
 X <- cbind(rep(1,length(DriversKilled)),PetrolPrice,law)
 wald.test(DriversKilled, X, NULL, NULL, Offset = kms)
+
+
+# GP with constant overdispersion
+X <- cbind(rep(1,length(DriversKilled)),PetrolPrice,law)
+W <- rep(1,length(DriversKilled))
+wald.test(DriversKilled, X, W, NULL, Offset = kms)
+
+# ZIGP with constant overdispersion and constant zero-inflation
+X <- cbind(rep(1,length(DriversKilled)),PetrolPrice,law)
+W <- rep(1,length(DriversKilled))
+Z <- cbind(rep(1,length(DriversKilled)))
+wald.test(DriversKilled, X, W, Z, Offset = kms)
+
+# no significant zero-inflation according to the Wald test
+}
+\references{
+Czado, C., Erhardt, V., Min, A., Wagner, S. (2007) 
+Zero-inflated generalized Poisson models with regression effects on the mean, 
+dispersion and zero-inflation level applied to patent outsourcing rates.
+Statistical Modelling 7 (2), 125-153.
 }
 \keyword{ models }% at least one, from doc/KEYWORDS
 
