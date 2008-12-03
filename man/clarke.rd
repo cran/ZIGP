@@ -16,24 +16,27 @@ clarke(model1, model2, alpha=0.05, correction=T)
 }
 \examples{
 data(Seatbelts)
-DriversKilled <- as.vector(Seatbelts[,1]) # will be response
-kms <- as.vector(Seatbelts[,5])           # will be exposure
-PetrolPrice <- as.vector(Seatbelts[,6])   # will be covariate 1
-law <- as.vector(Seatbelts[,8])           # will be covariate 2
+DriversKilled <- as.vector(Seatbelts[,1])            # will be response
+kms <- as.vector(Seatbelts[,5]/mean(Seatbelts[,5]))  # will be exposure
+PetrolPrice <- as.vector(Seatbelts[,6])              # will be covariate 1
+law <- as.vector(Seatbelts[,8])                      # will be covariate 2
 
-X.poi <- cbind(rep(1,length(DriversKilled)),PetrolPrice,law)
+fm.X.poi <- ~ PetrolPrice + law
 
-X.gp <- cbind(rep(1,length(DriversKilled)),PetrolPrice,law)
-W.gp <- rep(1,length(DriversKilled))
+fm.X.gp <- ~ PetrolPrice + law
+fm.W.gp <- ~ 1
 
-X.zigp <- cbind(rep(1,length(DriversKilled)),PetrolPrice,law)
-W.zigp <- rep(1,length(DriversKilled))
-Z.zigp <- cbind(rep(1,length(DriversKilled)))
+fm.X.zigp <- ~ PetrolPrice + law
+fm.W.zigp <- ~ 1
+fm.Z.zigp <- ~ 1
 
 
-poi  <- mle.zigp(Yin=DriversKilled, Xin=X.poi,  Win=NULL,   Zin=NULL,   Offset = kms, init = FALSE)
-gp   <- mle.zigp(Yin=DriversKilled, Xin=X.gp,   Win=W.gp,   Zin=NULL,   Offset = kms, init = FALSE)
-zigp <- mle.zigp(Yin=DriversKilled, Xin=X.zigp, Win=W.zigp, Zin=Z.zigp, Offset = kms, init = FALSE)
+poi  <- mle.zigp(Yin=DriversKilled, fm.X=fm.X.poi,  fm.W=NULL,   fm.Z=NULL,   
+                 Offset = kms, init = FALSE)
+gp   <- mle.zigp(Yin=DriversKilled, fm.X=fm.X.gp,   fm.W=fm.W.gp,   fm.Z=NULL,   
+                 Offset = kms, init = FALSE)
+zigp <- mle.zigp(Yin=DriversKilled, fm.X=fm.X.zigp, fm.W=fm.W.zigp, fm.Z=fm.Z.zigp, 
+                 Offset = kms, init = FALSE)
 clarke(poi,gp)
 clarke(gp,zigp)
 clarke(poi,zigp)

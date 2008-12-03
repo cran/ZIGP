@@ -1,30 +1,30 @@
 mle.zigp.full.like <-
-function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
+function (Yein, Xein, Offset = rep(1, length(Yein)), summary = TRUE,
     plot = FALSE, method = "CG")
 {
-    assign("Y",Yein,.GlobalEnv)
-    Y <- get("Y", pos=globalenv())
-    assign("Xsave",Xein,.GlobalEnv)
+    assign("Ysave", Yein, .GlobalEnv)
+    Ysave <- get("Ysave", pos=globalenv())
+    assign("Xsave", Xein, .GlobalEnv)
     Xsave <- get("Xsave", pos=globalenv())
     Wsave <- get("Wsave", pos=globalenv())
     Zsave <- get("Zsave", pos=globalenv())
     if (is.matrix(Xsave)) {
         assign("n",dim(Xsave)[1],.GlobalEnv)
         n <- get("n", pos=globalenv())
-        assign("k",dim(Xsave)[2],.GlobalEnv)
-        k <- get("k", pos=globalenv())
+        assign("ksave",dim(Xsave)[2],.GlobalEnv)
+        k <- get("ksave", pos=globalenv())
     }
     else {
         assign("n",length(Xsave),.GlobalEnv)
         n <- get("n", pos=globalenv())
-        assign("k",1,.GlobalEnv)
-        k <- get("k", pos=globalenv())
+        assign("ksave",1,.GlobalEnv)
+        k <- get("ksave", pos=globalenv())
     }
     assign("t.i",Offset,.GlobalEnv)
     t.i <- get("t.i", pos=globalenv())
-    alpha <- log(sqrt(var(Y)/mean(Y)))
+    alpha <- log(sqrt(var(Yein)/mean(Yein)))
     gamma <- -log(4)
-    beta <- summary(glm(Y ~ offset(log(t.i)) + Xsave - 1, family = poisson))$coefficients[,
+    beta <- summary(glm(Yein ~ offset(log(t.i)) + Xsave - 1, family = poisson))$coefficients[,
         1]
     start.delta <- c(alpha, gamma, beta)
     
@@ -54,7 +54,7 @@ function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
     fit <- fit.zigp1(delta)
     res <- double(n)
     RSS <- 0
-    res <- Y - fit$fit
+    res <- Yein - fit$fit
     RSS <- sum(res^2)
     AIC <- -2 * loglikelihood + 2 * (k + 2)
     range.mu <- c(min(fit$mu), max(fit$mu))
@@ -62,7 +62,7 @@ function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
         AIC = AIC, Dispersion.Parameter = phi, Range.mu = range.mu,
         Log.Likelihood = loglikelihood, Residuals = res, RSS = RSS,
         Iterations = it,
-        Message = message, Response = Y,
+        Message = message, Response = Yein,
         Fitted.Values = fit$fit, Design = Xsave),.GlobalEnv)
     ausgabe <- get("ausgabe", pos=globalenv())
     #if (plot) {
@@ -78,4 +78,4 @@ function (Yein, Xein, Offset = rep(1, length(Y)), summary = TRUE,
             return(ausgabe)
         }
     #}
-}
+}

@@ -6,10 +6,10 @@ function (delta)
     k.beta <- get("k.beta", pos=globalenv())
     k.alpha <- get("k.alpha", pos=globalenv())
     k.gamma <- get("k.gamma", pos=globalenv())
+    Ysave <- get("Ysave", pos=globalenv())
     Xsave <- get("Xsave", pos=globalenv())
     Wsave <- get("Wsave", pos=globalenv())
     Zsave <- get("Zsave", pos=globalenv())
-    Y <- get("Y", pos=globalenv())
     t.i <- get("t.i", pos=globalenv())
 
     eta.mu <- double(n)
@@ -58,19 +58,19 @@ function (delta)
     else {
         k.i <- rep(0, n)
     }
-    temp1 <- (mu.i + b.i * Y)
+    temp1 <- (mu.i + b.i * Ysave)
 
     if (is.null(Zsave) == FALSE) {
-      s1 <- sum(ifelse(Y == 0, 1, 0) * (log(k.i + exp(-1/phi.i *
+      s1 <- sum(ifelse(Ysave == 0, 1, 0) * (log(k.i + exp(-1/phi.i *
           mu.i)) - log(1 + k.i)))
     }
     else {
-      s1 <- sum(ifelse(Y == 0, 1, 0) * (-1/phi.i *
+      s1 <- sum(ifelse(Ysave == 0, 1, 0) * (-1/phi.i *
             mu.i))
     }
-    s2 <- sum(ifelse(Y > 0, 1, 0) * (-log(1 + k.i) + log(t.i) +
-        eta.mu + (Y - 1) * log(temp1) - Y * log(phi.i) - 1/phi.i *
-        temp1 - lgamma(Y + 1)))
+    s2 <- sum(ifelse(Ysave > 0, 1, 0) * (-log(1 + k.i) + log(t.i) +
+        eta.mu + (Ysave - 1) * log(temp1) - Ysave * log(phi.i) - 1/phi.i *
+        temp1 - lgamma(Ysave + 1)))
     l <- s1 + s2
     return(-l)
 }

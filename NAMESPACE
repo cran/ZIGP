@@ -1,1 +1,1 @@
-export(clarke, fit.zigp, FM, gradient, loglikelihood.zigp, response.zigp, dzigp, pzigp, qzigp, rzigp, wald.test, mle.zigp, optimized.run, vuong)
+export(clarke, fit.zigp, FM, gradient, loglikelihood.zigp, response.zigp, dzigp, pzigp, qzigp, rzigp, est.zigp, mle.zigp, optimized.run, vuong, eda.od, eda.zi)

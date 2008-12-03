@@ -15,13 +15,13 @@ and zero-inflation level. Therefore, three design matrices are allowed.
 \tabular{ll}{
 Package: \tab ZIGP\cr
 Type: \tab Package\cr
-Version: \tab 2.7\cr
-Date: \tab 2008-11-14\cr
+Version: \tab 3.0\cr
+Date: \tab 2008-12-03\cr
 License: \tab GPL (>= 3)\cr
 }
 Distribution functions in R notation are 'dzigp', 'pzigp', 'qzigp', 'rzigp'.
 
-The most important function is 'wald.test'. This function can be fed with
+The most important function is 'est.zigp'. This function can be fed with
 design matrices for the mean, overdispersion and zero-inflation level. It 
 returns an summary-like overview of the covariates together with significance
 statistics referring to the Wald test. It can be used for the sequential 
@@ -30,6 +30,9 @@ elimination of non-significant effects.
 Other useful functions are 'loglikelihood.zigp', which evaluates the 
 loglikelihood function on the given parameter value. Scores can be calculated
 using 'gradient', the Fisher Information matrix using 'FM'.
+
+Tools for an exploratory data analysis for the overdispersion level and zero-
+inflation level are given in 'eda.od' and 'eda.zi', respectively.
 
 Nonnested model comparison can be done using a test proposed by Vuong which 
 is implemented in function 'vuong' or by a test proposed by Clarke using 

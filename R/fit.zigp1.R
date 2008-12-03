@@ -4,7 +4,7 @@ function(delta)
 {
 
         n <- get("n", pos=globalenv())
-        k <- get("k", pos=globalenv())
+        k <- get("ksave", pos=globalenv())
         Xsave <- get("Xsave", pos=globalenv())
         t.i <- get("t.i", pos=globalenv())
         

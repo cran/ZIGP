@@ -1,14 +1,25 @@
 mle.zigp <-
-function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
+function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1, length(Yin)),
     init = TRUE)
 {
 
-    assign("Y",Yin,.GlobalEnv)
-    Y <- get("Y", pos=globalenv())
+    assign("Ysave",Yin,.GlobalEnv)
+    Ysave <- get("Ysave", pos=globalenv())
+    Xin <- model.matrix(fm.X)
     assign("Xsave",Xin,.GlobalEnv)
     Xsave <- get("Xsave", pos=globalenv())
+    if (is.null(fm.W)) { Win <- fm.W }
+    else {
+      if (fm.W==~1) Win <- rep(1,length(Ysave))
+      else Win <- model.matrix(fm.W)
+    }
     assign("Wsave",Win,.GlobalEnv)
     Wsave <- get("Wsave", pos=globalenv())
+    if (is.null(fm.Z)) { Zin <- fm.Z }
+    else {
+      if (fm.Z==~1) Zin <- rep(1,length(Ysave))
+      else Zin <- model.matrix(fm.Z)
+    }
     assign("Zsave",Zin,.GlobalEnv)
     Zsave <- get("Zsave", pos=globalenv())
     if (is.matrix(Xsave)) {
@@ -55,7 +66,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     t.i <- get("t.i", pos=globalenv())
     if (init) {
 
-        start.delta <- optimized.run(Y, Xsave, Wsave, Zsave)
+        start.delta <- optimized.run(Ysave, Xsave, Wsave, Zsave)
 
         opt <- optim(par = start.delta, fn = loglikelihood.zigp,
             gr = gradient, method = "BFGS")
@@ -101,7 +112,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         else {
             gamma <- NULL
         }
-        beta <- summary(glm(Y ~ offset(log(t.i)) + 1 + Xsave, family = poisson(link = log)))$coefficients[,
+        beta <- summary(glm(Ysave ~ offset(log(t.i)) + 1 + Xsave, family = poisson(link = log)))$coefficients[,
             1]
         start.delta <- c(beta, alpha, gamma)
         opt <- optim(par = start.delta, fn = loglikelihood.zigp,
@@ -135,8 +146,8 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         gamma <- NULL
     }
     fit <- fit.zigp(delta)
-    res <- Y - fit$fit
-    chsq <- sum((Y - fit$fit)^2/(fit$fit))
+    res <- Ysave - fit$fit
+    chsq <- sum((Ysave - fit$fit)^2/(fit$fit))
     range.mu <- c(min(fit$mu), max(fit$mu))
     if (is.null(Zsave) == FALSE) {
         if (is.matrix(Zsave)) {
@@ -169,7 +180,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         Dispersion.Parameter = phi, Range.Mu = range.mu, Range.Phi = range.phi,
         Range.Omega = range.omega, Log.Likelihood = loglikelihood,
         Residuals = res, Pearson = chsq, AIC = AIC, Iterations = it,
-        Message = message, Response = Y,
+        Message = message, Response = Ysave,
         Fitted.Values = fit$fit, Design.Mu = Xsave, Design.Phi = Wsave,
         Design.Omega = Zsave,
         Loglike.Vuong = llvuong)

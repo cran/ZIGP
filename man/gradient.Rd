@@ -25,6 +25,7 @@ convergence speed and ensures correct convergence even if the log
 likelihood function is not continuous due to the indicator function of 
 the ZI parameter.
 
+The response has to be defined as Ysave.
 The design matrices have to be defined as Xsave (for mean), Wsave (for overdispersion)
 and Zsave (for ZI).
 
@@ -39,7 +40,7 @@ k.gamma has to be defined as the length of gamma.
 t.i has to be defined as the exposure.
 }
 \examples{
-Y <- c(3,0,2)
+Ysave <- c(3,0,2)
 Xsave <- matrix(c(1:3,4,3,5),3,2)
 Wsave <- c(3,-4,-1)
 Zsave <- rep(1,3)

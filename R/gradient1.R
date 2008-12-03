@@ -3,10 +3,10 @@ function(delta)
 
 {
 
-  k <- get("k", pos=globalenv())
+  k <- get("ksave", pos=globalenv())
   n <- get("n", pos=globalenv())
-  Y <- get("Y", pos=globalenv())
   t.i <- get("t.i", pos=globalenv())
+  Ysave <- get("Ysave", pos=globalenv())
   grad <- double(2+k)
 
   eta <- double(n)
@@ -49,11 +49,11 @@ function(delta)
 
 # terms of gradient with 1_{Y_i = 0}
 
-    s1 <- sum(ifelse(Y == 0,1,0)* (1/phi^2*P0*mu.i/(omega/(1-omega)+P0)))
+    s1 <- sum(ifelse(Ysave == 0,1,0)* (1/phi^2*P0*mu.i/(omega/(1-omega)+P0)))
 
 # terms of gradient with 1_{Y_i > 0}
 
-    s2 <- sum(ifelse(Y>0,1,0)* (Y*(Y-1)/(mu.i+(phi-1)*Y)-Y/phi+(mu.i-Y)/phi^2))
+    s2 <- sum(ifelse(Ysave>0,1,0)* (Ysave*(Ysave-1)/(mu.i+(phi-1)*Ysave)-Ysave/phi+(mu.i-Ysave)/phi^2))
 
   grad[1] <- s1 + s2
 
@@ -63,7 +63,7 @@ function(delta)
 
 # terms of gradient with 1_{Y_i = 0}
 
-    s1 <- sum(ifelse(Y == 0,1,0)* 1/(((1-omega)^2)*(omega/(1-omega) + P0)))
+    s1 <- sum(ifelse(Ysave == 0,1,0)* 1/(((1-omega)^2)*(omega/(1-omega) + P0)))
 
 # terms of gradient independent of Y_i
 
@@ -81,11 +81,11 @@ for (j in 1:k)
 
 # terms of gradient with 1_{Y_i = 0}
 
-    s1 <- sum(ifelse(Y == 0,1,0)* Xsave[,j]*(P0*(-1/phi)*mu.i/(omega/(1-omega)+P0)))
+    s1 <- sum(ifelse(Ysave == 0,1,0)* Xsave[,j]*(P0*(-1/phi)*mu.i/(omega/(1-omega)+P0)))
 
 # terms of gradient with 1_{Y_i > 0}
 
-    s2 <- sum(ifelse(Y>0,1,0)* Xsave[,j]*(1+(Y-1)*mu.i/(mu.i+(phi-1)*Y)-1/phi*mu.i))
+    s2 <- sum(ifelse(Ysave>0,1,0)* Xsave[,j]*(1+(Ysave-1)*mu.i/(mu.i+(phi-1)*Ysave)-1/phi*mu.i))
 
   grad[2+j] <- s1 + s2
 

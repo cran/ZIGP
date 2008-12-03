@@ -1,13 +1,25 @@
-wald.test <-
-function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
-    init = T)
+
+est.zigp <-
+function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1, length(Yin)),
+    init = T, tex=F)
 {
-    assign("Y",Yin,.GlobalEnv)
-    Y <- get("Y", pos=globalenv())
+    assign("Ysave",Yin,.GlobalEnv)
+    Ysave <- get("Ysave", pos=globalenv())
+    Xin <- model.matrix(fm.X)
     assign("Xsave",Xin,.GlobalEnv)
     Xsave <- get("Xsave", pos=globalenv())
+    if (is.null(fm.W)) { Win <- fm.W }
+    else {
+      if (fm.W==~1) Win <- rep(1,length(Ysave))
+      else Win <- model.matrix(fm.W)
+    }
     assign("Wsave",Win,.GlobalEnv)
     Wsave <- get("Wsave", pos=globalenv())
+    if (is.null(fm.Z)) { Zin <- fm.Z }
+    else {
+      if (fm.Z==~1) Zin <- rep(1,length(Ysave))
+      else Zin <- model.matrix(fm.Z)
+    }
     assign("Zsave",Zin,.GlobalEnv)
     Zsave <- get("Zsave", pos=globalenv())
     assign("k.beta",dim(Xsave)[2],.GlobalEnv)
@@ -40,9 +52,9 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         assign("k.gamma",0,.GlobalEnv)
         k.gamma <- get("k.gamma", pos=globalenv())
     }
-    assign("n",length(Y),.GlobalEnv)
+    assign("n",length(Ysave),.GlobalEnv)
     n <- get("n", pos=globalenv())
-    ausgabe <- mle.zigp(Y, Xsave, Wsave, Zsave, Offset = Offset, init = init)
+    ausgabe <- mle.zigp(Ysave, fm.X, fm.W, fm.Z, Offset = Offset, init = init)
     hat.beta <- ausgabe$Coefficients.Mu
     if (is.null(Wsave) == FALSE) {
         hat.alpha <- ausgabe$Coefficients.Phi
@@ -226,13 +238,27 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         coef.desc.gamma <- c("OMEGA REGRESSION", coef.desc.gamma)
     }
     p.value.beta2 <- p.value.beta
-    if (is.null(Wsave) == FALSE) { p.value.alpha2 <- p.value.alpha }
-    if (is.null(Zsave) == FALSE) { p.value.gamma2 <- p.value.gamma }
+    p.value.beta3 <- p.value.beta
+    if (is.null(Wsave) == FALSE) {
+      p.value.alpha2 <- p.value.alpha
+      p.value.alpha3 <- p.value.alpha
+    }
+    if (is.null(Zsave) == FALSE) {
+      p.value.gamma2 <- p.value.gamma
+      p.value.gamma3 <- p.value.gamma
+    }
     for (i in 1:k.beta) {
       p.value.beta2[i] <- ifelse(p.value.beta[i]<10^(-16),"<2e-16",
               as.character(formatC(p.value.beta[i],
               ifelse(p.value.beta[i]<10^(-4),3,4),
-              format=ifelse(p.value.beta[i]<10^(-4),"g","f")))) }
+              format=ifelse(p.value.beta[i]<10^(-4),"g","f"))))
+      p.value.beta3[i] <- paste("$",ifelse(p.value.beta[i]<10^(-16),"<2 \\cdot 10^{-16}",
+              as.character(formatC(p.value.beta[i],
+              ifelse(p.value.beta[i]<10^(-4),2,3),
+              format=ifelse(p.value.beta[i]<10^(-4),"g","f")))),"$",sep="")
+      if (p.value.beta[i]<10^(-4)&p.value.beta[i]>=10^(-16)) {
+        txt <- p.value.beta3[i]
+        p.value.beta3[i] <- paste(substring(txt,1,4)," \\cdot 10^{-",ifelse(substring(txt,7,7)==0,"",substring(txt,7,7)),substring(txt,8,8),"}$",sep="") }}
       p.value.beta <- p.value.beta2
     if (is.null(Wsave) == FALSE) {
         hat.alpha <- c("", as.character(formatC(hat.alpha, 5,
@@ -245,8 +271,16 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
           p.value.alpha2[i] <- ifelse(p.value.alpha[i]<10^(-16),"<2e-16",
               as.character(formatC(p.value.alpha[i],
               ifelse(p.value.alpha[i]<10^(-4),3,4),
-              format=ifelse(p.value.alpha[i]<10^(-4),"g","f")))) }
+              format=ifelse(p.value.alpha[i]<10^(-4),"g","f"))))
+          p.value.alpha3[i] <- paste("$",ifelse(p.value.alpha[i]<10^(-16),"<2 \\cdot 10^{-16}",
+              as.character(formatC(p.value.alpha[i],
+              ifelse(p.value.alpha[i]<10^(-4),2,3),
+              format=ifelse(p.value.alpha[i]<10^(-4),"g","f")))),"$",sep="")
+          if (p.value.alpha[i]<10^(-4)&p.value.alpha[i]>=10^(-16)) {
+            txt <- p.value.alpha3[i]
+            p.value.alpha3[i] <- paste(substring(txt,1,4)," \\cdot 10^{-",ifelse(substring(txt,7,7)==0,"",substring(txt,7,7)),substring(txt,8,8),"}$",sep="") }}
           p.value.alpha <- c("", p.value.alpha2)
+          p.value.alpha3 <- c("", p.value.alpha3)
         glimpse.alpha <- c("", glimpse.alpha)
     }
     else {
@@ -254,6 +288,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         hat.sd.alpha <- NULL
         z.stat.alpha <- NULL
         p.value.alpha <- NULL
+        p.value.alpha3 <- NULL
     }
     if (is.null(Zsave) == FALSE) {
         hat.gamma <- c("", as.character(formatC(hat.gamma, 5,
@@ -266,8 +301,16 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
           p.value.gamma2[i] <- ifelse(p.value.gamma[i]<10^(-16),"<2e-16",
               as.character(formatC(p.value.gamma[i],
               ifelse(p.value.gamma[i]<10^(-4),3,4),
-              format=ifelse(p.value.gamma[i]<10^(-4),"g","f")))) }
+              format=ifelse(p.value.gamma[i]<10^(-4),"g","f"))))
+          p.value.gamma3[i] <- paste("$",ifelse(p.value.gamma[i]<10^(-16),"<2 \\cdot 10^{-16}",
+              as.character(formatC(p.value.gamma[i],
+              ifelse(p.value.gamma[i]<10^(-4),2,3),
+              format=ifelse(p.value.gamma[i]<10^(-4),"g","f")))),"$",sep="")
+          if (p.value.gamma[i]<10^(-4)&p.value.gamma[i]>=10^(-16)) {
+            txt <- p.value.gamma3[i]
+            p.value.gamma3[i] <- paste(substring(txt,1,4)," \\cdot 10^{-",ifelse(substring(txt,7,7)==0,"",substring(txt,7,7)),substring(txt,8,8),"}$",sep="") }}
           p.value.gamma <- c("", p.value.gamma2)
+          p.value.gamma3 <- c("", p.value.gamma3)
         glimpse.gamma <- c("", glimpse.gamma)
     }
     else {
@@ -275,6 +318,7 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
         hat.sd.gamma <- NULL
         z.stat.gamma <- NULL
         p.value.gamma <- NULL
+        p.value.gamma3 <- NULL
     }
     k.alpha <- length(coef.names.alpha)
     k.gamma <- length(coef.names.gamma)
@@ -328,10 +372,64 @@ function (Yin, Xin, Win = NULL, Zin = NULL, Offset = rep(1, length(Yin)),
     output[(1 + k.beta + k.alpha + k.gamma + 10), 5] <- formatC(ausgabe$Range.Omega[2],
         digits = 2, format = "f")
     output2 <- data.frame(output)
-    colnames(output2)[1] <- "#1"
-    for (i in 1:dim(output2)[1]) {
-        rownames(output2)[i] <- paste("#", i, sep = "")
+    rm(Ysave,Xsave,Wsave,Zsave,envir=globalenv())
+    rn <- rep("",dim(output2)[1])
+    cn <- rep("",dim(output2)[2])
+    if (tex==FALSE) prmatrix(output2,rowlab=rn,collab=cn,quote=FALSE,right=TRUE)
+    if (tex) {
+      output[1:(1 + k.beta + k.alpha + k.gamma + 1), 6] <- c("Pr(>|z|)","",
+      p.value.beta3, p.value.alpha3, p.value.gamma3)
+          output <<- output
+      nr <- dim(output)[1]
+      nc <- dim(output)[2]
+      output3 <- matrix("&",nr,(nc-1)*2)
+      output3[,(nc-1)*2] <- "\\\\"
+      for (i in 1:(nc-1)) output3[,2*i-1] <- output[,i]
+      output3 <- output3[1:((1:nr)[output3[,3]=="Signif. codes: 0"]-2),]
+      output3[output3=="MU REGRESSION"] <- "$\\mu$ regression"
+      output3[output3=="PHI REGRESSION"] <- "$\\varphi$ regression"
+      output3[output3=="OMEGA REGRESSION"] <- "$\\omega$ regression"
+      output3[output3=="Pr(>|z|)"] <- "$Pr(>|z|)$"
+      nr <- dim(output3)[1]
+      for (i in 3:nr) {
+        if (output[i,3]!="") output3[i,5] <- paste("$",formatC(as.double(output[i,3]),3,format="f"),"$",sep="")
+        if (output[i,4]!="") output3[i,7] <- paste("$",formatC(as.double(output[i,4]),3,format="f"),"$",sep="")
+        if (output[i,5]!="") output3[i,9] <- paste("$",formatC(as.double(output[i,5]),3,format="f"),"$",sep="")
+      }
+      caption <- paste("\\caption{Model summary, AIC of ",round(ausgabe$AIC), ", $\\mu$ range of $[",
+      formatC(ausgabe$Range.Mu[1], digits = 2, format = "f"), ", ",
+      formatC(ausgabe$Range.Mu[2], digits = 2, format = "f"), "]$",
+      ifelse(k.alpha>0,paste(", $\\varphi$ range of $[",
+      formatC(ausgabe$Range.Phi[1], digits = 2, format = "f"), ", ",
+      formatC(ausgabe$Range.Phi[2], digits = 2, format = "f"), "]$",sep=""),""),
+      ifelse(k.gamma>0,paste(", $\\omega$ range of $[",
+      formatC(ausgabe$Range.Omega[1], digits = 2, format = "f"), ", ",
+      formatC(ausgabe$Range.Omega[2], digits = 2, format = "f"), "]$",sep=""),""),
+      ".}", sep="")
+      output <- matrix(NA,nr+1,dim(output3)[2])
+      output[1,] <- output3[1,]
+      output[2,] <- ""
+      output[2,1] <- "\\cline{3-6}"
+      output[3:(nr+1),] <- output3[2:nr,]
+      cat(paste("\\begin{table}[ht]","\n"))
+      cat(paste("\\begin{footnotesize}","\n"))
+      cat(paste("\\begin{center}","\n"))
+      cat(paste("\\begin{tabular}{rrrrrr}","\n"))
+      for (j in 1:(nr+1)) {
+        for (i in 1:((nc-1)*2)) {
+          cat(output[j,i])
+          cat(" ")
+        }
+        cat("\n")
+      }
+      cat(paste("\\end{tabular}","\n"))
+      cat(paste("\\end{center}","\n"))
+
+      cat(paste("\\end{footnotesize}","\n"))
+
+      cat(paste(caption,"\n"))
+      cat(paste("\\label{zigpmodel}","\n"))
+      cat(paste("\\end{table}","\n"))
     }
-    return(output2)
 }
 

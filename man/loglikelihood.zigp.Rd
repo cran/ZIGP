@@ -20,6 +20,7 @@ loglikelihood.zigp(delta)
 }
 }
 \details{
+The response has to be defined as Ysave.
 The design matrices have to be defined as Xsave (for mean), Wsave (for overdispersion)
 and Zsave (for ZI).
 
@@ -36,7 +37,7 @@ Y has to be defined as the response vector.
 t.i has to be defined as the exposure.
 }
 \examples{
-Y <- c(3,0,2)
+Ysave <- c(3,0,2)
 Xsave <- matrix(c(1:3,4,3,5),3,2)
 Wsave <- c(3,-4,-1)
 Zsave <- rep(1,3)
