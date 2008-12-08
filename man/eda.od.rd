@@ -25,10 +25,10 @@ covariates only make sense if they have only two levels.
 }
 \examples{
 data(Seatbelts)
-DriversKilled <- as.vector(Seatbelts[,1])            # will be response
-kms <- as.vector(Seatbelts[,5]/mean(Seatbelts[,5]))  # will be exposure
-PetrolPrice <- as.vector(Seatbelts[,6])              # will be covariate 1
-law <- as.vector(Seatbelts[,8])                      # will be covariate 2
+DriversKilled <- as.vector(Seatbelts[,1])           # will be response
+kms <- as.vector(Seatbelts[,5]/mean(Seatbelts[,5])) # will be exposure
+PetrolPrice <- as.vector(Seatbelts[,6])             # will be covariate 1
+law <- as.vector(Seatbelts[,8])                     # will be covariate 2
 
 eda.od(x=PetrolPrice, y=DriversKilled, Offset=kms)
 eda.od(x=PetrolPrice, y=DriversKilled, Offset=kms, numberclasses=20)

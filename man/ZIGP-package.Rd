@@ -7,7 +7,7 @@
 Zero-Inflated Generalized Poisson (ZIGP) Models
 }
 \description{
-Adapts GP, ZIP and ZIGP models by Maximum Likelihood estimation.
+Fits GP, ZIP and ZIGP models by Maximum Likelihood estimation.
 Regression is allowed not only on the mean but also on overdispersion
 and zero-inflation level. Therefore, three design matrices are allowed.
 }
@@ -15,17 +15,18 @@ and zero-inflation level. Therefore, three design matrices are allowed.
 \tabular{ll}{
 Package: \tab ZIGP\cr
 Type: \tab Package\cr
-Version: \tab 3.0\cr
-Date: \tab 2008-12-03\cr
+Version: \tab 3.1\cr
+Date: \tab 2008-12-08\cr
 License: \tab GPL (>= 3)\cr
 }
 Distribution functions in R notation are 'dzigp', 'pzigp', 'qzigp', 'rzigp'.
 
-The most important function is 'est.zigp'. This function can be fed with
-design matrices for the mean, overdispersion and zero-inflation level. It 
+The main function is 'est.zigp'. This function can be fed with
+design formulas for the mean, overdispersion and zero-inflation level. It 
 returns an summary-like overview of the covariates together with significance
 statistics referring to the Wald test. It can be used for the sequential 
-elimination of non-significant effects.
+elimination of non-significant effects. Function 'mle.zigp' returns estimates
+of regression coefficients, AIC etc. for further use.
 
 Other useful functions are 'loglikelihood.zigp', which evaluates the 
 loglikelihood function on the given parameter value. Scores can be calculated

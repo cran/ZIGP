@@ -5,7 +5,8 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1, length(Yin)),
 {
     assign("Ysave",Yin,.GlobalEnv)
     Ysave <- get("Ysave", pos=globalenv())
-    Xin <- model.matrix(fm.X)
+    if (fm.X==~1) Xin <- matrix(1,length(Ysave),1)
+    else Xin <- model.matrix(fm.X)
     assign("Xsave",Xin,.GlobalEnv)
     Xsave <- get("Xsave", pos=globalenv())
     if (is.null(fm.W)) { Win <- fm.W }
@@ -396,7 +397,7 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1, length(Yin)),
         if (output[i,4]!="") output3[i,7] <- paste("$",formatC(as.double(output[i,4]),3,format="f"),"$",sep="")
         if (output[i,5]!="") output3[i,9] <- paste("$",formatC(as.double(output[i,5]),3,format="f"),"$",sep="")
       }
-      caption <- paste("\\caption{Model summary, AIC of ",round(ausgabe$AIC), ", $\\mu$ range of $[",
+      caption <- paste("\\caption{Model summary, AIC of $",round(ausgabe$AIC), "$, $\\mu$ range of $[",
       formatC(ausgabe$Range.Mu[1], digits = 2, format = "f"), ", ",
       formatC(ausgabe$Range.Mu[2], digits = 2, format = "f"), "]$",
       ifelse(k.alpha>0,paste(", $\\varphi$ range of $[",

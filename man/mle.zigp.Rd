@@ -7,8 +7,8 @@
 mean, overdispersion and zero-inflation.
 }
 \usage{
-mle.zigp(Yin, fm.X, fm.W=NULL, fm.Z=NULL, Offset = rep(1, length(Yin)),
-init = TRUE)
+mle.zigp(Yin, fm.X, fm.W=NULL, fm.Z=NULL, 
+         Offset = rep(1, length(Yin)),init = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -51,7 +51,8 @@ fm.X <- ~ drivers.age
 fm.W <- ~ 0 + factor(brand)
 fm.Z <- ~ abroad
 
-mle.zigp(Yin=Y, fm.X=fm.X, fm.W=fm.W, fm.Z=fm.Z, Offset = insurance.year, init = FALSE)
+mle.zigp(Yin=Y, fm.X=fm.X, fm.W=fm.W, fm.Z=fm.Z, Offset = insurance.year, 
+         init = FALSE)
 
 }
 \references{

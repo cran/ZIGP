@@ -33,7 +33,12 @@ est.zigp(Yin, fm.X, fm.W=NULL, fm.Z=NULL,
      For numerical stability it may be very useful to center and standardize
      all non-categorical covariates, i.e. use 'x <- (x-mean(x))/sd(x)'.
 }
-\seealso{ Explorary data analysis tools eda.od() and eda.zi(). }
+\seealso{ 
+Estimated regression coefficients etc. can be obtained using 'mle.zigp'.
+
+Explorary data analysis tools for overdispersion and zero-inflation designs
+are 'eda.od' and 'eda.zi'.
+}
 \examples{
 # Number of damages in car insurance.
 # (not a good fit, just to illustrate how the software is used)
@@ -62,10 +67,10 @@ est.zigp(Yin=Y, fm.X=fm.X, fm.W=fm.W, fm.Z=fm.Z, Offset = insurance.year,
 # (time series character of the data is neglected)
 
 data(Seatbelts)
-DriversKilled <- as.vector(Seatbelts[,1])            # will be response
-kms <- as.vector(Seatbelts[,5]/mean(Seatbelts[,5]))  # will be exposure
-PetrolPrice <- as.vector(Seatbelts[,6])              # will be covariate 1
-law <- as.vector(Seatbelts[,8])                      # will be covariate 2
+DriversKilled <- as.vector(Seatbelts[,1])           # will be response
+kms <- as.vector(Seatbelts[,5]/mean(Seatbelts[,5])) # will be exposure
+PetrolPrice <- as.vector(Seatbelts[,6])             # will be covariate 1
+law <- as.vector(Seatbelts[,8])                     # will be covariate 2
 
 fm.X <- DriversKilled ~ PetrolPrice + law
 out.glm <- glm(fm.X, family=poisson, offset=log(kms))
