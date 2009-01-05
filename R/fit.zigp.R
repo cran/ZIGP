@@ -89,7 +89,7 @@ function(delta)
     
     else { phi <- 1 }
 
-    if(is.null(Wsave)==FALSE){ omega <- exp(eta.omega)/(1+exp(eta.omega)) }
+    if(is.null(Zsave)==FALSE){ omega <- exp(eta.omega)/(1+exp(eta.omega)) }
     
     else { omega <- 0 }
 

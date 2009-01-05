@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Fitting ZIGP(mu(i), phi(i), omega(i)) - Regression Models }
 \description{
-'est.zigp' is used to fit ZIGP(mu(i), phi(i), omega(i)) - Regression Models.
+'est.zigp' is used to fit ZIGP(mu(i), phi(i), omega(i)) - Regression Models (GP and ZIP as well).
 }
 \usage{
 est.zigp(Yin, fm.X, fm.W=NULL, fm.Z=NULL, 
