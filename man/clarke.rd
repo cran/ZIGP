@@ -30,16 +30,20 @@ fm.X.zigp <- ~ PetrolPrice + law
 fm.W.zigp <- ~ 1
 fm.Z.zigp <- ~ 1
 
-
-poi  <- mle.zigp(Yin=DriversKilled, fm.X=fm.X.poi,  fm.W=NULL,   
+poi  <- mle.zigp(Yin=DriversKilled, fm.X=fm.X.poi,  fm.W=NULL,
                  fm.Z=NULL,  Offset = kms, init = FALSE)
-gp   <- mle.zigp(Yin=DriversKilled, fm.X=fm.X.gp,   fm.W=fm.W.gp,   
+gp   <- mle.zigp(Yin=DriversKilled, fm.X=fm.X.gp,   fm.W=fm.W.gp,
                  fm.Z=NULL,  Offset = kms, init = FALSE)
-zigp <- mle.zigp(Yin=DriversKilled, fm.X=fm.X.zigp, fm.W=fm.W.zigp, 
+zigp <- mle.zigp(Yin=DriversKilled, fm.X=fm.X.zigp, fm.W=fm.W.zigp,
                  fm.Z=fm.Z.zigp, Offset = kms, init = FALSE)
+# it is possible to compare to a Negative Binomial fit:
+library(MASS)
+nb   <- glm.nb(DriversKilled ~ offset(log(kms)) + PetrolPrice + law)
+
 clarke(poi,gp)
 clarke(gp,zigp)
 clarke(poi,zigp)
+clarke(gp,nb)
 }
 \references{
 Clarke, Kevin A. (2007). A Simple Distribution-Free Test for Nonnested Model Selection. 

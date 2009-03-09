@@ -15,8 +15,8 @@ and zero-inflation level. Therefore, three design matrices are allowed.
 \tabular{ll}{
 Package: \tab ZIGP\cr
 Type: \tab Package\cr
-Version: \tab 3.2\cr
-Date: \tab 2008-01-05\cr
+Version: \tab 3.3\cr
+Date: \tab 2009-03-09\cr
 License: \tab GPL (>= 3)\cr
 }
 Distribution functions in R notation are 'dzigp', 'pzigp', 'qzigp', 'rzigp'.
@@ -35,9 +35,9 @@ using 'gradient', the Fisher Information matrix using 'FM'.
 Tools for an exploratory data analysis for the overdispersion level and zero-
 inflation level are given in 'eda.od' and 'eda.zi', respectively.
 
-Nonnested model comparison can be done using a test proposed by Vuong which 
-is implemented in function 'vuong' or by a test proposed by Clarke using 
-function 'clarke'.
+Nonnested model comparison (also for the Negative Binomial distribution) can
+be facilitated using a test proposed by Vuong which is implemented in function
+'vuong' or by a test proposed by Clarke using function 'clarke'.
 }
 \author{
 Vinzenz Erhardt

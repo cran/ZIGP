@@ -1,0 +1,33 @@
+citHeader("To cite ZIGP in publications use:")
+
+citEntry(entry="Article",
+         title = "Zero-inflated generalized Poisson models with regression effects on the mean, dispersion and zero-inflation level applied to patent outsourcing rates",
+         author = personList(as.person("Czado, C."),
+                             as.person("Erhardt, V."),
+                             as.person("Min, A."),
+                             as.person("Wagner, S.")),
+         year         = "2007",
+         journal      = "Statistical Modelling",
+         volume       = "7",
+         number       = "2",
+         pages        = "125--153",
+         textVersion = 
+         paste("Czado, C., Erhardt, V., Min, A., Wagner, S. (2007) ",
+               "Zero-inflated generalized Poisson models with regression effects on the mean, dispersion and zero-inflation level applied to patent outsourcing rates. ",
+               "Statistical Modelling 7 (2), 125--153.")
+)
+
+desc <- packageDescription("ZIGP")
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
+vers <- paste("R package version", desc$Version)
+
+citEntry(entry="Article",
+         title = "ZIGP: Zero-Inflated Generalized Poisson (ZIGP) Models",
+         author = personList(as.person("Vinzenz Erhardt")),
+         year = year,
+         note = vers,
+         textVersion =
+         paste("Erhardt, V (",year,") ",
+               "ZIGP: Zero-Inflated Generalized Poisson (ZIGP) Models. ",
+               vers, ".", sep="")
+)
