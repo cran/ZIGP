@@ -15,8 +15,8 @@ and zero-inflation level. Therefore, three design matrices are allowed.
 \tabular{ll}{
 Package: \tab ZIGP\cr
 Type: \tab Package\cr
-Version: \tab 3.3\cr
-Date: \tab 2009-03-09\cr
+Version: \tab 3.4\cr
+Date: \tab 2009-04-20\cr
 License: \tab GPL (>= 3)\cr
 }
 Distribution functions in R notation are 'dzigp', 'pzigp', 'qzigp', 'rzigp'.

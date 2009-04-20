@@ -100,6 +100,8 @@ function(delta)
 
     P0 <- exp(-1/phi.i*mu.i)
 
+    P0[P0<10e-100] <- 10e-100
+
 if(k.beta==1){ Xsave <- cbind(Xsave,rep(0,length(Xsave)))  }
 
 if(k.alpha==1){ Wsave <- cbind(Wsave,rep(0,length(Wsave)))  }

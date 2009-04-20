@@ -43,6 +43,8 @@ function(delta)
 
     P0 <- exp(-1/phi*mu.i)
 
+    P0[P0<10e-100] <- 10e-100
+
 
 
 # Derivative for phi

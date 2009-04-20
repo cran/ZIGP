@@ -22,7 +22,7 @@ function (Yein, Xein, Offset = rep(1, length(Yein)), summary = TRUE,
     }
     assign("t.i",Offset,.GlobalEnv)
     t.i <- get("t.i", pos=globalenv())
-    alpha <- log(sqrt(var(Yein)/mean(Yein)))
+    alpha <- log(sqrt(var(Yein)/mean(Yein))-1)
     gamma <- -log(4)
     beta <- summary(glm(Yein ~ offset(log(t.i)) + Xsave - 1, family = poisson))$coefficients[,
         1]

@@ -7,21 +7,22 @@
 }
 \usage{
 est.zigp(Yin, fm.X, fm.W=NULL, fm.Z=NULL, 
-          Offset = rep(1, length(Yin)), init = T, tex=F)
+          Offset = rep(1, length(Yin)), init = T, tex=F, reltol = sqrt(.Machine$double.eps))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{Yin}{ response vector of length n. }
-  \item{fm.X}{ formula for mean design. }
-  \item{fm.W}{ formula for overdispersion design (optional). }
-  \item{fm.Z}{ formula for zero inflation design (optional). }
-  \item{Offset}{ exposure for individual observation lengths. Defaults to a vector of 1.
+  \item{Yin}{ Response vector of length n. }
+  \item{fm.X}{ Formula for mean design. }
+  \item{fm.W}{ Formula for overdispersion design (optional). }
+  \item{fm.Z}{ Formula for zero inflation design (optional). }
+  \item{Offset}{ Exposure for individual observation lengths. Defaults to a vector of 1.
           The offset MUST NOT be in 'log' scale. }
-  \item{init}{ a logical value indicating whether initial optimization values for 
+  \item{init}{ A logical value indicating whether initial optimization values for
           dispersion are set to -2.5 and values for zero inflation regression 
           parameters are set to -1 (init = F) or are estimated by a 
           ZIGP(mu(i), phi, omega)-model (init = T).  Defaults to 'T'. }
   \item{tex}{ Should the output be a TeX table? Defaults to regular output. }
+  \item{reltol}{ Relative tolerance for 'optim' routine. }
 }
 \details{
      Constant overdispersion and/or zero-inflation can be modelled using an 
