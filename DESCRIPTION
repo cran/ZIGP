@@ -1,13 +1,13 @@
 Package: ZIGP
 Type: Package
 Title: Zero Inflated Generalized Poisson (ZIGP) regression models
-Version: 3.4
-Date: 2009-04-20
+Version: 3.5
+Date: 2009-05-13
 Author: Vinzenz Erhardt
 Maintainer: Vinzenz Erhardt <erhardt@ma.tum.de>
 Description: Fit, analyze and compare GP, ZIP and ZIGP regression
         models
 License: GPL (>= 3)
-Packaged: 2009-04-20 17:18:52 UTC; hornik
+Packaged: 2009-05-13 19:16:58 UTC; hornik
 Repository: CRAN
-Date/Publication: 2009-04-20 17:24:58
+Date/Publication: 2009-05-13 19:25:23

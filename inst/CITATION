@@ -17,9 +17,9 @@ citEntry(entry="Article",
                "Statistical Modelling 7 (2), 125--153.")
 )
 
-desc <- packageDescription("ZIGP")
-year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
-vers <- paste("R package version", desc$Version)
+if(!exists("meta") || is.null(meta)) meta <- packageDescription("ZIGP")
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
+vers <- paste("R package version", meta$Version)
 
 citEntry(entry="Article",
          title = "ZIGP: Zero-Inflated Generalized Poisson (ZIGP) Models",
