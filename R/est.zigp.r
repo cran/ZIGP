@@ -273,6 +273,11 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1,
             p.value.beta3[i] <- paste(substring(txt, 1, 4), " \\cdot 10^{-",
                 ifelse(substring(txt, 7, 7) == 0, "", substring(txt,
                   7, 7)), substring(txt, 8, 8), "}$", sep = "")
+            # correction if first digit after . is 0
+            if (substring(txt,3,3) == "e") {
+                p.value.beta3[i] <- paste(substring(txt, 1, 2), ".0 \\cdot 10^{-",
+                ifelse(substring(txt, 5, 5) == 0, "", substring(txt,
+                5, 5)), substring(txt, 6, 6), "}$", sep = "") }
         }
     }
     p.value.beta <- p.value.beta2
@@ -299,6 +304,11 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1,
                   4), " \\cdot 10^{-", ifelse(substring(txt,
                   7, 7) == 0, "", substring(txt, 7, 7)), substring(txt,
                   8, 8), "}$", sep = "")
+                # correction if first digit after . is 0
+                if (substring(txt,3,3) == "e") {
+                    p.value.alpha3[i] <- paste(substring(txt, 1, 2), ".0 \\cdot 10^{-",
+                    ifelse(substring(txt, 5, 5) == 0, "", substring(txt,
+                    5, 5)), substring(txt, 6, 6), "}$", sep = "") }
             }
         }
         p.value.alpha <- c("", p.value.alpha2)
@@ -335,6 +345,11 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1,
                   4), " \\cdot 10^{-", ifelse(substring(txt,
                   7, 7) == 0, "", substring(txt, 7, 7)), substring(txt,
                   8, 8), "}$", sep = "")
+                # correction if first digit after . is 0
+                if (substring(txt,3,3) == "e") {
+                    p.value.gamma3[i] <- paste(substring(txt, 1, 2), ".0 \\cdot 10^{-",
+                    ifelse(substring(txt, 5, 5) == 0, "", substring(txt,
+                    5, 5)), substring(txt, 6, 6), "}$", sep = "") }
             }
         }
         p.value.gamma <- c("", p.value.gamma2)
