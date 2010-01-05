@@ -19,9 +19,7 @@ pzigp(x, mu, phi, omega)
 Calculates a vector of the same length as of x evaluating the ZIGP
 distribution function at x.}
 \examples{
-x <- 1:10
+x <- 0:10
 pzigp(x, 2, 1.5, 0.2)
-#[1] 0.6123450 0.7567027 0.8505619 0.909123 0.944969 0.966718 0.979865
-#[8] 0.9878036 0.9925998 0.9955013
 }
 \keyword{ distribution }% at least one, from doc/KEYWORDS

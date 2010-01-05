@@ -25,6 +25,7 @@ citEntry(entry="Article",
          title = "ZIGP: Zero-Inflated Generalized Poisson (ZIGP) Models",
          author = personList(as.person("Vinzenz Erhardt")),
          year = year,
+         journal = "",
          note = vers,
          textVersion =
          paste("Erhardt, V (",year,") ",
