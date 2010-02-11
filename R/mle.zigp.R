@@ -174,6 +174,38 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1,
     else {
         gamma <- NULL
     }
+    B <- FM(beta, alpha, gamma, Xsave, Wsave, Zsave, Offset = Offset)
+    sd.vector <- sqrt(diag(solve(B, tol = 1e-50)))
+    se.beta <- sd.vector[1:k.beta]
+    if (is.null(Wsave) == FALSE) {
+        se.alpha <- sd.vector[(k.beta + 1):(k.beta + k.alpha)]
+    }
+    else {
+        se.alpha <- NULL
+    }
+    if (is.null(Zsave) == FALSE) {
+        se.gamma <- sd.vector[(k.beta + k.alpha + 1):(k.beta + k.alpha +
+            k.gamma)]
+    }
+    else {
+        se.gamma <- NULL
+    }
+    se.phi <- NA
+    se.omega <- NA
+    if (k.alpha==1|k.gamma==1) {
+      B2 <- B
+      if (k.alpha==1) {
+        B2[k.beta+1,] <- B2[k.beta+1,] / exp(alpha)
+        B2[,k.beta+1] <- B2[,k.beta+1] / exp(alpha)
+      }
+      if (k.gamma==1) {
+        B2[k.beta+k.alpha+1,] <- B2[k.beta+k.alpha+1,] * (1+exp(gamma))^2
+        B2[,k.beta+k.alpha+1] <- B2[,k.beta+k.alpha+1] * (1+exp(gamma))^2
+      }
+      sd.vector2 <- sqrt(diag(solve(B2, tol = 1e-50)))
+      if (k.alpha==1) se.phi <- sd.vector2[k.beta+1]
+      if (k.gamma==1) se.omega <- sd.vector2[k.beta+k.alpha+1]
+    }
     fit <- fit.zigp(delta)
     res <- Ysave - fit$fit
     chsq <- sum((Ysave - fit$fit)^2/(fit$fit))
@@ -206,7 +238,9 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1,
     range.phi <- c(min(phi), max(phi))
     mle.data <- list(ZI.Parameter = omega, Coefficients.Mu = beta,
         Coefficients.Phi = alpha, Coefficients.Omega = gamma,
-        Dispersion.Parameter = phi, Range.Mu = range.mu, Range.Phi = range.phi,
+        Dispersion.Parameter = phi, se.beta = se.beta, se.alpha = se.alpha,
+        se.gamma = se.gamma, se.phi = se.phi, se.omega = se.omega,
+        Range.Mu = range.mu, Range.Phi = range.phi,
         Range.Omega = range.omega, Log.Likelihood = loglikelihood,
         Residuals = res, Pearson = chsq, AIC = AIC, Iterations = it,
         Message = message, Response = Ysave, Fitted.Values = fit$fit,

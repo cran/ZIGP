@@ -77,9 +77,7 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1,
     else {
         hat.gamma <- NULL
     }
-    B <- FM(hat.beta, hat.alpha, hat.gamma, Xsave, Wsave, Zsave,
-        Offset = Offset)
-    sd.vector <- sqrt(diag(solve(B, tol = 1e-50)))
+    sd.vector <- c(ausgabe$se.beta, ausgabe$se.alpha, ausgabe$se.gamma)
     hat.sd.beta <- sd.vector[1:k.beta]
     if (is.null(Wsave) == FALSE) {
         hat.sd.alpha <- sd.vector[(k.beta + 1):(k.beta + k.alpha)]
@@ -363,58 +361,74 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1,
         p.value.gamma <- NULL
         p.value.gamma3 <- NULL
     }
-    k.alpha <- length(coef.names.alpha)
-    k.gamma <- length(coef.names.gamma)
-    output <- matrix("", 1 + k.beta + k.alpha + k.gamma + 12,
+    k.alpha2 <- length(coef.names.alpha)
+    k.gamma2 <- length(coef.names.gamma)
+    output <- matrix("", 1 + k.beta + k.alpha2 + k.gamma2 + 12,
         7)
-    output[2:(1 + k.beta + k.alpha + k.gamma + 1), 1] <- c(coef.names.beta,
+    output[2:(1 + k.beta + k.alpha2 + k.gamma2 + 1), 1] <- c(coef.names.beta,
         coef.names.alpha, coef.names.gamma)
-    output[2:(1 + k.beta + k.alpha + k.gamma + 1), 2] <- c(coef.desc.beta,
+    output[2:(1 + k.beta + k.alpha2 + k.gamma2 + 1), 2] <- c(coef.desc.beta,
         coef.desc.alpha, coef.desc.gamma)
-    output[1:(1 + k.beta + k.alpha + k.gamma + 1), 3] <- c("Estimate",
+    output[1:(1 + k.beta + k.alpha2 + k.gamma2 + 1), 3] <- c("Estimate",
         "", formatC(hat.beta, 5, format = "f"), hat.alpha, hat.gamma)
-    output[1:(1 + k.beta + k.alpha + k.gamma + 1), 4] <- c("Std. Error",
+    output[1:(1 + k.beta + k.alpha2 + k.gamma2 + 1), 4] <- c("Std. Error",
         "", formatC(hat.sd.beta, 5, format = "f"), hat.sd.alpha,
         hat.sd.gamma)
-    output[1:(1 + k.beta + k.alpha + k.gamma + 1), 5] <- c("z value",
+    output[1:(1 + k.beta + k.alpha2 + k.gamma2 + 1), 5] <- c("z value",
         "", formatC(z.stat.beta, 4, format = "f"), z.stat.alpha,
         z.stat.gamma)
-    output[1:(1 + k.beta + k.alpha + k.gamma + 1), 6] <- c("Pr(>|z|)",
+    output[1:(1 + k.beta + k.alpha2 + k.gamma2 + 1), 6] <- c("Pr(>|z|)",
         "", p.value.beta, p.value.alpha, p.value.gamma)
-    output[1:(1 + k.beta + k.alpha + k.gamma + 1), 7] <- c("",
+    output[1:(1 + k.beta + k.alpha2 + k.gamma2 + 1), 7] <- c("",
         "", glimpse.beta, glimpse.alpha, glimpse.gamma)
-    output[(1 + k.beta + k.alpha + k.gamma + 3), 2] <- "Signif. codes: 0"
-    output[(1 + k.beta + k.alpha + k.gamma + 3), 3] <- "`***' 0.001"
-    output[(1 + k.beta + k.alpha + k.gamma + 3), 4] <- "`**'  0.01"
-    output[(1 + k.beta + k.alpha + k.gamma + 3), 5] <- "`*'  0.05"
-    output[(1 + k.beta + k.alpha + k.gamma + 3), 6] <- "`.'  0.1"
-    output[(1 + k.beta + k.alpha + k.gamma + 3), 7] <- "` ' 1"
-    output[(1 + k.beta + k.alpha + k.gamma + 4), 2] <- "Iterations"
-    output[(1 + k.beta + k.alpha + k.gamma + 4), 4] <- ausgabe$Iterations[1]
-    output[(1 + k.beta + k.alpha + k.gamma + 5), 2] <- "Log Likelihood"
-    output[(1 + k.beta + k.alpha + k.gamma + 5), 4] <- formatC(ausgabe$Log.Likelihood,
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 3), 2] <- "Signif. codes: 0"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 3), 3] <- "`***' 0.001"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 3), 4] <- "`**'  0.01"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 3), 5] <- "`*'  0.05"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 3), 6] <- "`.'  0.1"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 3), 7] <- "` ' 1"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 4), 2] <- "Iterations"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 4), 5] <- ausgabe$Iterations[1]
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 5), 2] <- "Log Likelihood"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 5), 5] <- formatC(ausgabe$Log.Likelihood,
         digits = 1, format = "f")
-    output[(1 + k.beta + k.alpha + k.gamma + 6), 2] <- "Pearson Chi Squared"
-    output[(1 + k.beta + k.alpha + k.gamma + 6), 4] <- formatC(ausgabe$Pearson,
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 6), 2] <- "Pearson Chi Squared"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 6), 5] <- formatC(ausgabe$Pearson,
         ifelse(ausgabe$Pearson > 10^(6), 3, 0), format = ifelse(ausgabe$Pearson >
             10^(6), "g", "f"))
-    output[(1 + k.beta + k.alpha + k.gamma + 7), 2] <- "AIC"
-    output[(1 + k.beta + k.alpha + k.gamma + 7), 4] <- round(ausgabe$AIC)
-    output[(1 + k.beta + k.alpha + k.gamma + 8), 2] <- "Range Mu"
-    output[(1 + k.beta + k.alpha + k.gamma + 8), 4] <- formatC(ausgabe$Range.Mu[1],
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 7), 2] <- "AIC"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 7), 5] <- round(ausgabe$AIC)
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 8), 2] <- "Range Mu"
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 8), 5] <- formatC(ausgabe$Range.Mu[1],
         digits = 2, format = "f")
-    output[(1 + k.beta + k.alpha + k.gamma + 8), 5] <- formatC(ausgabe$Range.Mu[2],
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 8), 6] <- formatC(ausgabe$Range.Mu[2],
         digits = 2, format = "f")
-    output[(1 + k.beta + k.alpha + k.gamma + 9), 2] <- "Range Phi"
-    output[(1 + k.beta + k.alpha + k.gamma + 9), 4] <- formatC(ausgabe$Range.Phi[1],
-        digits = 2, format = "f")
-    output[(1 + k.beta + k.alpha + k.gamma + 9), 5] <- formatC(ausgabe$Range.Phi[2],
-        digits = 2, format = "f")
-    output[(1 + k.beta + k.alpha + k.gamma + 10), 2] <- "Range Omega"
-    output[(1 + k.beta + k.alpha + k.gamma + 10), 4] <- formatC(ausgabe$Range.Omega[1],
-        digits = 2, format = "f")
-    output[(1 + k.beta + k.alpha + k.gamma + 10), 5] <- formatC(ausgabe$Range.Omega[2],
-        digits = 2, format = "f")
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 9), 2] <- ifelse(k.alpha<=1,"Phi","Range Phi")
+    if (k.alpha<=1) {
+      output[(1 + k.beta + k.alpha2 + k.gamma2 + 9), 3] <- formatC(ausgabe$Dispersion.Parameter[1],
+          digits = 5, format = "f")
+      if (k.alpha==1) output[(1 + k.beta + k.alpha2 + k.gamma2 + 9), 4] <- formatC(ausgabe$se.phi,
+          digits = 5, format = "f")
+    }
+    if (k.alpha>1) {
+      output[(1 + k.beta + k.alpha2 + k.gamma2 + 9), 5] <- formatC(ausgabe$Range.Phi[1],
+          digits = 2, format = "f")
+      output[(1 + k.beta + k.alpha2 + k.gamma2 + 9), 6] <- formatC(ausgabe$Range.Phi[2],
+          digits = 2, format = "f")
+    }
+    output[(1 + k.beta + k.alpha2 + k.gamma2 + 10), 2] <- ifelse(k.gamma<=1,"Omega","Range Omega")
+    if (k.gamma<=1) {
+      output[(1 + k.beta + k.alpha2 + k.gamma2 + 10), 3] <- formatC(ausgabe$ZI.Parameter[1],
+          digits = 5, format = "f")
+      if (k.gamma==1) output[(1 + k.beta + k.alpha2 + k.gamma2 + 10), 4] <- formatC(ausgabe$se.omega,
+          digits = 5, format = "f")
+    }
+    if (k.gamma>1) {
+      output[(1 + k.beta + k.alpha2 + k.gamma2 + 10), 5] <- formatC(ausgabe$Range.Omega[1],
+          digits = 2, format = "f")
+      output[(1 + k.beta + k.alpha2 + k.gamma2 + 10), 6] <- formatC(ausgabe$Range.Omega[2],
+          digits = 2, format = "f")
+    }
     output2 <- data.frame(output)
     rm(Ysave, Xsave, Wsave, Zsave, envir = globalenv())
     rn <- rep("", dim(output2)[1])
@@ -423,7 +437,7 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1,
         prmatrix(output2, rowlab = rn, collab = cn, quote = FALSE,
             right = TRUE)
     if (tex) {
-        output[1:(1 + k.beta + k.alpha + k.gamma + 1), 6] <- c("Pr(>|z|)",
+        output[1:(1 + k.beta + k.alpha2 + k.gamma2 + 1), 6] <- c("Pr(>|z|)",
             "", p.value.beta3, p.value.alpha3, p.value.gamma3)
         output <<- output
         nr <- dim(output)[1]
@@ -450,17 +464,24 @@ function (Yin, fm.X, fm.W = NULL, fm.Z = NULL, Offset = rep(1,
                 output3[i, 9] <- paste("$", formatC(as.double(output[i,
                   5]), 3, format = "f"), "$", sep = "")
         }
+        txtphi <- ifelse(k.alpha >
+                0, paste(", $\\varphi$ range of $[", formatC(ausgabe$Range.Phi[1],
+                digits = 2, format = "f"), ", ", formatC(ausgabe$Range.Phi[2],
+                digits = 2, format = "f"), "]$", sep = ""),"")
+        if (k.alpha==1) txtphi <- paste(", $\\varphi$ of $", formatC(ausgabe$Dispersion.Parameter[1],
+          digits = 5, format = "f"), "$ (SE $", formatC(ausgabe$se.phi,
+          digits = 5, format = "f"), "$)", sep = "")
+        txtomega <- ifelse(k.gamma > 0, paste(", $\\omega$ range of $[",
+                formatC(ausgabe$Range.Omega[1], digits = 2, format = "f"),
+                ", ", formatC(ausgabe$Range.Omega[2], digits = 2,
+                  format = "f"), "]$", sep = ""),"")
+        if (k.gamma==1) txtomega <- paste(", $\\omega$ of $", formatC(ausgabe$ZI.Parameter[1],
+          digits = 5, format = "f"), "$ (SE $", formatC(ausgabe$se.omega,
+          digits = 5, format = "f"), "$)", sep = "")
         caption <- paste("\\caption{Model summary, AIC of $",
             round(ausgabe$AIC), "$, $\\mu$ range of $[", formatC(ausgabe$Range.Mu[1],
                 digits = 2, format = "f"), ", ", formatC(ausgabe$Range.Mu[2],
-                digits = 2, format = "f"), "]$", ifelse(k.alpha >
-                0, paste(", $\\varphi$ range of $[", formatC(ausgabe$Range.Phi[1],
-                digits = 2, format = "f"), ", ", formatC(ausgabe$Range.Phi[2],
-                digits = 2, format = "f"), "]$", sep = ""), ""),
-            ifelse(k.gamma > 0, paste(", $\\omega$ range of $[",
-                formatC(ausgabe$Range.Omega[1], digits = 2, format = "f"),
-                ", ", formatC(ausgabe$Range.Omega[2], digits = 2,
-                  format = "f"), "]$", sep = ""), ""), ".}",
+                digits = 2, format = "f"), "]$", txtphi, txtomega, ".}",
             sep = "")
         output <- matrix(NA, nr + 1, dim(output3)[2])
         output[1, ] <- output3[1, ]

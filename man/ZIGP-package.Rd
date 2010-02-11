@@ -15,8 +15,8 @@ and zero-inflation level.
 \tabular{ll}{
 Package: \tab ZIGP\cr
 Type: \tab Package\cr
-Version: \tab 3.7\cr
-Date: \tab 2010-01-05\cr
+Version: \tab 3.8\cr
+Date: \tab 2010-02-11\cr
 License: \tab GPL (>= 3)\cr
 }
 Distribution functions in R notation are 'dzigp', 'pzigp', 'qzigp', 'rzigp'.
